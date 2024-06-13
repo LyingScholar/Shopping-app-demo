@@ -12,6 +12,9 @@ public class Need {
 
     @JsonProperty("id") private int id;
     @JsonProperty("name") private String name;
+    @JsonProperty("quantity") int quantity;
+    @JsonProperty("cost") int cost;
+    @JsonProperty("type") String type;
 
     /**
      * Create a hero with the given id and name
@@ -23,9 +26,13 @@ public class Need {
      * is not provided in the JSON object, the Java field gets the default Java
      * value, i.e. 0 for int
      */
-    public Need(@JsonProperty("id") int id, @JsonProperty("name") String name) {
+    public Need(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("quantity") int quantity, 
+                @JsonProperty("cost") int cost, @JsonProperty("type") String type) {
         this.id = id;
         this.name = name;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.type = type;
     }
 
     /**
