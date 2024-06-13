@@ -8,18 +8,18 @@ public class Need {
     private static final Logger LOG = Logger.getLogger(Need.class.getName());
 
     // Package private for tests
-    static final String STRING_FORMAT = "Hero [id=%d, name=%s]";
+    static final String STRING_FORMAT = "need [id=%d, name=%s]";
 
-    @JsonProperty("id") private int id;
+    @JsonProperty("id") private final int id;
     @JsonProperty("name") private String name;
     @JsonProperty("quantity") int quantity;
     @JsonProperty("cost") int cost;
     @JsonProperty("type") String type;
 
     /**
-     * Create a hero with the given id and name
-     * @param id The id of the hero
-     * @param name The name of the hero
+     * Create a need with the given id and name
+     * @param id The id of the need
+     * @param name The name of the need
      * 
      * {@literal @}JsonProperty is used in serialization and deserialization
      * of the JSON object to the Java object in mapping the fields.  If a field
@@ -36,20 +36,20 @@ public class Need {
     }
 
     /**
-     * Retrieves the id of the hero
-     * @return The id of the hero
+     * Retrieves the id of the need
+     * @return The id of the need
      */
     public int getId() {return id;}
 
     /**
-     * Sets the name of the hero - necessary for JSON object to Java object deserialization
-     * @param name The name of the hero
+     * Sets the name of the need - necessary for JSON object to Java object deserialization
+     * @param name The name of the need
      */
     public void setName(String name) {this.name = name;}
 
     /**
-     * Retrieves the name of the hero
-     * @return The name of the hero
+     * Retrieves the name of the need
+     * @return The name of the need
      */
     public String getName() {return name;}
 
@@ -60,4 +60,5 @@ public class Need {
     public String toString() {
         return String.format(STRING_FORMAT,id,name);
     }
+
 }
