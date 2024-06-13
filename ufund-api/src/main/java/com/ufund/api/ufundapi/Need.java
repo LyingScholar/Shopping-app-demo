@@ -34,7 +34,7 @@ public class Need {
         this.cost = cost;
         this.type = type;
     }
-
+    // test
     /**
      * Retrieves the id of the need
      * @return The id of the need
