@@ -7,7 +7,7 @@ An online U-Fund system built in Java 17=> and ___ _replace with other platform 
 
 - Jacob Eggleston
 - Rushil Patel
-- MEMBER3
+- Quinton Miller
 - MEMBER4
 
 
