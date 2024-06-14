@@ -53,6 +53,12 @@ public class Need {
      */
     public String getName() {return name;}
 
+    public int getQuantity() {return quantity;}
+
+    public int getCost() {return cost;}
+
+    public String getType() {return type;}
+
     /**
      * {@inheritDoc}
      */

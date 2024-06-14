@@ -144,11 +144,22 @@ public class Cupboard {
      */
     
     public Need[] findNeeds(String containsText) {
-        synchronized(needs) {
+        synchronized(needs) { 
             return getNeedsArray(containsText);
         }
     }
 
+    public boolean checkForANeed(String name) {
+        synchronized(needs) {
+            Need[] needArray = getNeedsArray();
+            for (Need need : needArray) {
+                if (need.getName().equals(name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
     /**
     ** {@inheritDoc}
      */
@@ -170,10 +181,15 @@ public class Cupboard {
         synchronized(needs) {
             // We create a new need object because the id field is immutable
             // and we need to assign the next unique id
-            Need newNeed = new Need(nextId(),need.getName());
-            needs.put(newNeed.getId(),newNeed);
-            save(); // may throw an IOException
-            return newNeed;
+            if (!checkForANeed(need.getName())) {
+                Need newNeed = new Need(nextId(),need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                needs.put(newNeed.getId(),newNeed);
+                save(); // may throw an IOException
+                return newNeed;
+            } else {
+                
+                return null;
+            }
         }
     }
 
