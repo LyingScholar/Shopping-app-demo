@@ -1,6 +1,7 @@
 package com.ufund.api.ufundapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 public class NeedTest {
@@ -49,6 +50,53 @@ public class NeedTest {
         assertEquals(100, need.getCost());
         assertEquals("grocery", need.getType());
 
+    }
+
+    /**
+     * edge case of negative ID, IsPossible
+     */
+    @Test
+    public void testConstructorWithNegatve() {
+        Need need = new Need(-1, "Food", 10, 100, "Grocery");
+        assertEquals(-1, need.getId());
+    }
+    /**
+     * edge case of zero items, IsPossible
+     */
+    @Test
+    public void testConstructorWithZeroQuant() {
+        Need need = new Need(1, "Food", 0, 100, "Grocery");
+        assertEquals(0, need.getQuantity());
+    }
+
+    /**
+     * edge case of zero cost, IsPossible
+     */
+    @Test
+    public void testConstructorWithZeroCost() {
+        Need need = new Need(1, "Food", 10, 0, "Grocery");
+        assertEquals(0, need.getCost());
+    }
+
+
+    /**
+     * edge case of null name, IsPossible
+     */
+    @Test
+    public void testSetNameWithNull() {
+        Need need = new Need(1, "Food", 10, 100, "Grocery");
+        need.setName(null);
+        assertNull(need.getName());
+    }
+
+    /**
+     * edge case of empty String name, IsPossible
+     */
+    @Test
+    public void testSetNameWithEmptyString() {
+        Need need = new Need(1, "Food", 10, 100, "Grocery");
+        need.setName("");
+        assertEquals("", need.getName());
     }
 
 }
