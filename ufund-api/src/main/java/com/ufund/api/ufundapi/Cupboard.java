@@ -57,7 +57,7 @@ public class Cupboard {
      * @return  The array of {@link Need needs}, may be empty
      */
     private Need[] getNeedsArray() {
-        return getNeedsArray(null);
+        return getNeedsArray("");
     }
 
     /**
