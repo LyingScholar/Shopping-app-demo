@@ -71,26 +71,26 @@ public class CupboardTest {
                 File testFile = File.createTempFile("test", ".json");
                 ObjectMapper objectMapper = new ObjectMapper();
                 Need[] testNeeds = {
-                    new Need(1, "Need 1", 10, 100, "Type A"),
+                    new Need(1, "Need 1A", 10, 100, "Type A"),
                     new Need(2, "Need 2", 5, 50, "Type B"),
-                    new Need(3, "Need 3", 15, 75, "Type A")
+                    new Need(3, "Need 1B", 15, 75, "Type A")
                 };
                 objectMapper.writeValue(testFile, testNeeds);
                 Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
-                Need[] foundNeeds = cupboard.findNeeds("Type A");
+                Need[] foundNeeds = cupboard.findNeeds("Need 1");
                 assertEquals(2, foundNeeds.length);
             
         
         // Assertions to verify the contents of the found needs
         assertEquals(1, foundNeeds[0].getId());
-        assertEquals("Need 1", foundNeeds[0].getName());
+        assertEquals("Need 1A", foundNeeds[0].getName());
         assertEquals(10, foundNeeds[0].getQuantity());
         assertEquals(100, foundNeeds[0].getCost());
         assertEquals("Type A", foundNeeds[0].getType());
         
 
         assertEquals(3, foundNeeds[1].getId());
-        assertEquals("Need 3", foundNeeds[1].getName());
+        assertEquals("Need 1B", foundNeeds[1].getName());
         assertEquals(15, foundNeeds[1].getQuantity());
         assertEquals(75, foundNeeds[1].getCost());
         assertEquals("Type A", foundNeeds[1].getType());

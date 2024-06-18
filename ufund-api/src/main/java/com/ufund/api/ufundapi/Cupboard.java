@@ -73,7 +73,7 @@ public class Cupboard {
         ArrayList<Need> needArrayList = new ArrayList<>();
 
         for (Need need : needs.values()) {
-            if (containsText == null || need.getName().contains(containsText)) {
+            if (!(containsText == null) && need.getName().contains(containsText)) {
                 needArrayList.add(need);
             }
         }
