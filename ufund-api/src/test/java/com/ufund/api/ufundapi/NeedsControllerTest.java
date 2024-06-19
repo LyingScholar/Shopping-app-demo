@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -52,7 +54,7 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testGetNeds() {
+    void testGetNeeds() {
         Need[] needs = {new Need(1, "Need 1", 10, 100, "Food"),
                         new Need(2, "Need 4", 20, 200, "Non-Fod")};
         when(cupboard.getNeeds()).thenReturn(needs);
@@ -87,6 +89,22 @@ public class NeedsControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
         assertEquals(newNeed, response.getBody());
+    }
+
+    @Test
+    void testcreateNewNeed_NeedAlreadyExists() throws IOException {
+         Need need1 = new Need(1, "New Need", 30, 300, "Food");
+         Need need2 = new Need(2, "New Need", 30, 300, "Food");
+        when(cupboard.createNeed(need1)).thenReturn(need1);
+        when(cupboard.createNeed(need2)).thenReturn(null);
+
+        ResponseEntity<Need> firstResponse = needController.createNeed(need1);
+        assertEquals(HttpStatus.CREATED, firstResponse.getStatusCode());
+        assertEquals(need1, firstResponse.getBody());
+
+        ResponseEntity<Need> secondResponse = needController.createNeed(need2);
+        assertEquals(HttpStatus.CONFLICT, secondResponse.getStatusCode());
+        assertNull(secondResponse.getBody());
     }
 
     @Test

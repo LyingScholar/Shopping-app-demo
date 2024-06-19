@@ -138,7 +138,11 @@ public class NeedController {
         
         try {
             Need newNeed = Cupboard.createNeed(Need);
-            return new ResponseEntity<>(newNeed,HttpStatus.CREATED);
+            if (newNeed  != null) {
+                return new ResponseEntity<>(newNeed,HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
