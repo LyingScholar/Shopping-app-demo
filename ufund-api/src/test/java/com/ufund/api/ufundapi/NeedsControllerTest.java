@@ -17,7 +17,7 @@ public class NeedsControllerTest {
 
     //we set up a mock environment for the cupboard before every test
     //test names are self explanatory so specific jdocs are omitted
-    //response entity and mockito were googled a lot while writing these tests
+    //response entity and mockito were googled A LOT while writing these tests
 
     @Mock
     private Cupboard cupboard;
@@ -39,7 +39,6 @@ public class NeedsControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(need, response.getBody());
     }
-
 
 
     @Test
@@ -111,4 +110,21 @@ public class NeedsControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
+    
+// 01001110 01100101 01110110 01100101 01110010 00100000 01100111 01101111 01101110 01101110 01100001
+    @Test
+    void testDeleteNeedExists() throws IOException{
+        int id = 1;
+        when(cupboard.deleteNeed(id)).thenReturn(true);
+        ResponseEntity<Need> response = needController.deleteNeed(id);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteNeedDosNotExist() throws IOException{
+        int id = 1;
+        when(cupboard.deleteNeed(id)).thenReturn(false);
+        ResponseEntity<Need> response = needController.deleteNeed(id);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
