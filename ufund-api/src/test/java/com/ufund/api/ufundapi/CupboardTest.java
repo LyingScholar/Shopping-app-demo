@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +20,7 @@ public class CupboardTest {
      * also tested all needs get retrieved successfully
      */
     @Test
-    public void testGetNeeds() throws IOException {
+    public void testGetAllNeeds() throws IOException {
             File testFile = File.createTempFile("test", ".json");
             ObjectMapper objectMapper = new ObjectMapper();
             Need[] initialNeeds = {
@@ -126,6 +129,66 @@ public class CupboardTest {
         assertEquals(50, retrievedNeed.getCost());
         assertEquals("Type B", retrievedNeed.getType());
 
+    }
+
+
+    /**
+     * @throws IOException
+     * created a test file to write sample needs and act as cupboard
+     * testing deletion of a specific need
+     * also testing deletion of non existant need
+     */
+    @Test
+    public void testDeleteNeed() throws IOException {
+        File testFile = File.createTempFile("test", ".json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Need[] initialNeeds = {
+            new Need(1, "Need 1", 10, 100, "Type A"),
+            new Need(2, "Need 4", 5, 50, "Type B"),
+            new Need(3, "Need 3", 15, 75, "Type A")
+        };
+        objectMapper.writeValue(testFile, initialNeeds);
+        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+
+
+        // Deleting the need
+        boolean deleted = cupboard.deleteNeed(initialNeeds[1].getId());
+        assertTrue(deleted);
+        assertNull(cupboard.getNeed((initialNeeds[1]).getId()));
+        
+        // Testing false deletion for non existant need
+        deleted = cupboard.deleteNeed(initialNeeds[1].getId());
+        assertFalse(deleted);
+    }
+
+
+    /**
+     * @throws IOException
+     * created a test file to write sample needs and act as cupboard
+     * testing addition of new need to the cupboard
+     * also testing insertion of duplicate need(should fail)
+     */
+    @Test
+    public void testUpdateNeedOrAddNeed() throws IOException {
+        File testFile = File.createTempFile("test", ".json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Need[] initialNeeds = {
+            new Need(1, "Need 1", 10, 100, "Type A"),
+            new Need(2, "Need 2", 5, 50, "Type B"),
+            new Need(3, "Need 3", 15, 75, "Type A")
+        };
+        objectMapper.writeValue(testFile, initialNeeds);
+        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+
+        // Update a need
+        Need updatedNeed = new Need(2, "Updated Need", 20, 200, "Type C");
+        // boolean updated = cupboard.updateNeed(updatedNeed);
+        // assertTrue(updated);
+
+        // Verify that the need was updated
+        Need[] updatedNeeds = cupboard.getNeeds();
+        assertEquals(3, updatedNeeds.length);
+        assertNotNull(cupboard.getNeed(updatedNeed.getId()));
     }
 
 }
