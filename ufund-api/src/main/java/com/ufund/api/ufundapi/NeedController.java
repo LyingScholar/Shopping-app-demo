@@ -57,7 +57,7 @@ public class NeedController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Need> getNeed(@PathVariable int id) {
-        LOG.info("GET /Needes/" + id);
+        LOG.info("GET /Needs/" + id);
         try {
             Need Need = Cupboard.getNeed(id);
             if (Need != null)
@@ -80,7 +80,7 @@ public class NeedController {
      */
     @GetMapping("")
     public ResponseEntity<Need[]> getNeeds() {
-        LOG.info("GET /Needes");
+        LOG.info("GET /Needs");
 
         try {
             Need[] Needs = Cupboard.getNeeds();
@@ -109,7 +109,7 @@ public class NeedController {
      */
     @GetMapping("/")
     public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
-        LOG.info("GET /Needes/?name="+name);
+        LOG.info("GET /Needs/?name="+name);
         
         try {
             Need[] Needs = Cupboard.findNeeds(name);
@@ -134,11 +134,15 @@ public class NeedController {
      */
     @PostMapping("")
     public ResponseEntity<Need> createNeed(@RequestBody Need Need) {
-        LOG.info("POST /Needes " + Need);
+        LOG.info("POST /Needs " + Need);
         
         try {
             Need newNeed = Cupboard.createNeed(Need);
-            return new ResponseEntity<>(newNeed,HttpStatus.CREATED);
+            if (newNeed  != null) {
+                return new ResponseEntity<>(newNeed,HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -157,7 +161,7 @@ public class NeedController {
      */
     @PutMapping("")
     public ResponseEntity<Need> updateNeed(@RequestBody Need Need) {
-        LOG.info("PUT /Needes " + Need);
+        LOG.info("PUT /Needs " + Need);
 
         try {
             Need updatedNeed = Cupboard.updateNeed(Need);
@@ -182,7 +186,7 @@ public class NeedController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Need> deleteNeed(@PathVariable int id) {
-        LOG.info("DELETE /Needes/" + id);
+        LOG.info("DELETE /Needs/" + id);
 
         try {
             if (Cupboard.deleteNeed(id)) {

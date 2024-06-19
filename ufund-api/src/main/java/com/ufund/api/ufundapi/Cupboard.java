@@ -40,6 +40,11 @@ public class Cupboard {
         load();  // load the needs from the file
     }
 
+    public Cupboard() {
+        needs = new TreeMap<>();
+        nextId = 0;
+    }
+
     /**
      * Generates the next id for a new {@linkplain Need need}
      * 
@@ -57,7 +62,7 @@ public class Cupboard {
      * @return  The array of {@link Need needs}, may be empty
      */
     private Need[] getNeedsArray() {
-        return getNeedsArray(null);
+        return getNeedsArray("");
     }
 
     /**

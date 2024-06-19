@@ -36,7 +36,7 @@ public class NeedTest {
     @Test
     public void testToString() {
         Need need = new Need(1, "Food", 10, 100, "Grocery");
-        String expected = "need [id=1, name=Food]";
+        String expected = "need [id=1, name=Food, quantity=10, cost=100, type=Grocery]";
         assertEquals(expected, need.toString());
     }
 
