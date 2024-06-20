@@ -40,11 +40,6 @@ public class Cupboard {
         load();  // load the needs from the file
     }
 
-    public Cupboard() {
-        needs = new TreeMap<>();
-        nextId = 0;
-    }
-
     /**
      * Generates the next id for a new {@linkplain Need need}
      * 
