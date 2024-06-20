@@ -8,7 +8,7 @@ public class Need {
     private static final Logger LOG = Logger.getLogger(Need.class.getName());
 
     // Package private for tests
-    static final String STRING_FORMAT = "need [id=%d, name=%s]";
+    static final String STRING_FORMAT = "need [id=%d, name=%s, quantity=%d, cost=%d, type=%s]";
 
     @JsonProperty("id") private final int id;
     @JsonProperty("name") private String name;
@@ -34,7 +34,7 @@ public class Need {
         this.cost = cost;
         this.type = type;
     }
-
+    // test
     /**
      * Retrieves the id of the need
      * @return The id of the need
@@ -53,12 +53,18 @@ public class Need {
      */
     public String getName() {return name;}
 
+    public int getQuantity() {return quantity;}
+
+    public int getCost() {return cost;}
+
+    public String getType() {return type;}
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return String.format(STRING_FORMAT,id,name);
+        return String.format(STRING_FORMAT,id,name, quantity, cost, type);
     }
 
 }
