@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Component
@@ -57,7 +57,7 @@ public class Cupboard {
      * @return  The array of {@link Need needs}, may be empty
      */
     private Need[] getNeedsArray() {
-        return getNeedsArray(null);
+        return getNeedsArray("");
     }
 
     /**
@@ -73,7 +73,7 @@ public class Cupboard {
         ArrayList<Need> needArrayList = new ArrayList<>();
 
         for (Need need : needs.values()) {
-            if (containsText == null || need.getName().contains(containsText)) {
+            if (!(containsText == null) && need.getName().contains(containsText)) {
                 needArrayList.add(need);
             }
         }
@@ -187,7 +187,6 @@ public class Cupboard {
                 save(); // may throw an IOException
                 return newNeed;
             } else {
-                
                 return null;
             }
         }
