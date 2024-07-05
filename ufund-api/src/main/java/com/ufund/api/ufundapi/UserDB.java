@@ -89,8 +89,10 @@ public class UserDB {
         // User doesn't exist
         if (checkForAUser(username) == false) {
             return 1;
+        // User already logged in
         } else if (checkForALoggedInUser(username) == true) {
             return 2;
+        // User logged in successfully
         } else {
             User user = getUserByName(username);
             loggedInUsers.add(user);
