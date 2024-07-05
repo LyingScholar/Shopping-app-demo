@@ -3,6 +3,7 @@ package com.ufund.api.ufundapi;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ public class UserDB {
     Map<Integer,User> users;   // Provides a local cache of the user objects
                                 // so that we don't user to read from the file
                                 // each time
+    private List<User> loggedInUsers; // Provides a list of users that are logged in
     private ObjectMapper objectMapper;  // Provides conversion between User
                                         // objects and JSON text format written
                                         // to the file
@@ -83,6 +85,18 @@ public class UserDB {
         return userArray;
     }
 
+    public int login(String username) {
+        // User doesn't exist
+        if (checkForAUser(username) == false) {
+            return 1;
+        } else if (checkForALoggedInUser(username) == true) {
+            return 2;
+        } else {
+            User user = getUserByName(username);
+            loggedInUsers.add(user);
+            return 3;
+        }
+    }
     /**
      * Saves the {@linkplain User users} from the map into the file as an array of JSON objects
      * 
@@ -111,6 +125,7 @@ public class UserDB {
      */
     private boolean load() throws IOException {
         users = new TreeMap<>();
+        loggedInUsers = new ArrayList<>();
         nextId = 0;
 
         // Deserializes the JSON objects from the file into an array of users
@@ -162,10 +177,33 @@ public class UserDB {
         }
     }
 
+    public User getUserByName(String name) {
+        synchronized(users) {
+            User[] userArray = getUsersArray();
+            for (User user : userArray) {
+                if (user.getName().equals(name)) {
+                    return user;
+                }
+            }
+            return null;
+        }
+    }
+
     public boolean checkForAUser(String name) {
         synchronized(users) {
             User[] userArray = getUsersArray();
             for (User user : userArray) {
+                if (user.getName().equals(name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public boolean checkForALoggedInUser(String name) {
+        synchronized(loggedInUsers) {
+            for (User user : loggedInUsers) {
                 if (user.getName().equals(name)) {
                     return true;
                 }
