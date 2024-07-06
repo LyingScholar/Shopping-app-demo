@@ -101,6 +101,23 @@ public class CupboardTest {
     }
     
 
+    @Test
+    public void testCheckForANeed() throws IOException {
+        File testFile = File.createTempFile("test", ".json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Need[] initialNeeds = {
+            new Need(1, "Need 1", 10, 100, "Type A"),
+            new Need(2, "Need 2", 5, 50, "Type B")
+        };
+        objectMapper.writeValue(testFile, initialNeeds);
+        
+        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+        
+        assertTrue(cupboard.checkForANeed("Need 1"));
+        assertFalse(cupboard.checkForANeed("Need 3"));
+    }
+
+
     /**
      * @throws IOException
      * created a test file to write sample needs and act as cupboard
@@ -135,6 +152,48 @@ public class CupboardTest {
     /**
      * @throws IOException
      * created a test file to write sample needs and act as cupboard
+     * testing the function, forcing it to search for non-existant need
+     */
+    @Test
+    public void testGetNeedNonExistent() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {
+        new Need(1, "Need 1", 10, 100, "Type A")
+    };
+    objectMapper.writeValue(testFile, initialNeeds);
+    
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    
+    Need retrievedNeed = cupboard.getNeed(99);
+    assertNull(retrievedNeed);
+}
+
+
+@Test
+public void testCreateNeed() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {};
+    objectMapper.writeValue(testFile, initialNeeds);
+    
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    
+    Need newNeed = new Need(0, "New Need", 5, 50, "Type C");
+    Need createdNeed = cupboard.createNeed(newNeed);
+    
+    assertNotNull(createdNeed);
+    assertEquals("New Need", createdNeed.getName());
+    assertTrue(createdNeed.getId() > 0);
+    
+    // Try to create a duplicate need
+    Need duplicateNeed = cupboard.createNeed(newNeed);
+    assertNull(duplicateNeed);
+}
+
+    /**
+     * @throws IOException
+     * created a test file to write sample needs and act as cupboard
      * testing deletion of a specific need
      * also testing deletion of non existant need
      */
@@ -165,30 +224,33 @@ public class CupboardTest {
     /**
      * @throws IOException
      * created a test file to write sample needs and act as cupboard
-     * testing addition of new need to the cupboard
-     * also testing insertion of duplicate need(should fail)
+     * testing addition of updating a need in the cupboard
+     * also testing updating non existant need
      */
-    @Test
-    public void testUpdateNeedOrAddNeed() throws IOException {
-        File testFile = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Need[] initialNeeds = {
-            new Need(1, "Need 1", 10, 100, "Type A"),
-            new Need(2, "Need 2", 5, 50, "Type B"),
-            new Need(3, "Need 3", 15, 75, "Type A")
-        };
-        objectMapper.writeValue(testFile, initialNeeds);
-        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
-
-        // Update a need
-        Need updatedNeed = new Need(2, "Updated Need", 20, 200, "Type C");
-        // boolean updated = cupboard.updateNeed(updatedNeed);
-        // assertTrue(updated);
-
-        // Verify that the need was updated
-        Need[] updatedNeeds = cupboard.getNeeds();
-        assertEquals(3, updatedNeeds.length);
-        assertNotNull(cupboard.getNeed(updatedNeed.getId()));
-    }
+@Test
+public void testUpdateNeed() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {
+        new Need(1, "Need 1", 10, 100, "Type A")
+    };
+    objectMapper.writeValue(testFile, initialNeeds);
+    
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    
+    Need updatedNeed = new Need(1, "Updated Need", 20, 200, "Type B");
+    Need result = cupboard.updateNeed(updatedNeed);
+    
+    assertNotNull(result);
+    assertEquals("Updated Need", result.getName());
+    assertEquals(20, result.getQuantity());
+    assertEquals(200, result.getCost());
+    assertEquals("Type B", result.getType());
+    
+    // Try to update a non-existent need
+    Need nonExistentNeed = new Need(99, "Non-existent", 5, 50, "Type C");
+    result = cupboard.updateNeed(nonExistentNeed);
+    assertNull(result);
+}
 
 }
