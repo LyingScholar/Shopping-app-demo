@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +30,7 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testGetNeed_shouldReturnTheNeedIfNeedExists() {
+    void testGetNeed_ReturnsTheNeedIfNeedExists() {
         int id = 1;
         Need need = new Need(id, "Test Need", 10, 100, "Food");
         when(cupboard.getNeed(id)).thenReturn(need);
@@ -54,7 +53,18 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testGetNeeds() {
+    void testGetNeed_ExceptionThrown() {
+    int id = 1;
+    when(cupboard.getNeed(id)).thenThrow(new RuntimeException("Test exception"));
+
+    ResponseEntity<Need> response = needController.getNeed(id);
+
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertNull(response.getBody());
+}
+
+    @Test
+    void testGetNeeds_NeedsFound() {
         Need[] needs = {new Need(1, "Need 1", 10, 100, "Food"),
                         new Need(2, "Need 4", 20, 200, "Non-Fod")};
         when(cupboard.getNeeds()).thenReturn(needs);
@@ -66,9 +76,34 @@ public class NeedsControllerTest {
     }
 
 
+    @Test
+    void testGetNeeds_NeedsNotFound() {
+        
+        when(cupboard.getNeeds()).thenReturn(null);
+
+        ResponseEntity<Need[]> response = needController.getNeeds();
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        
+    }
+
 
     @Test
-    void testSearchNeeds() {
+    void testGetNeeds_ThrowsError() {
+        Exception mockException = new RuntimeException("Test exception");
+        when(cupboard.getNeeds()).thenThrow(mockException);
+
+        ResponseEntity<Need[]> response = needController.getNeeds();
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+
+
+    @Test
+    void testSearchNeeds_NeedFound() {
         Need[] needs = {new Need(1, "Test Need", 10, 100, "Food"),
                         new Need(2, "Taste Need", 20, 269, "Non-Fod")};
         when(cupboard.findNeeds("Test")).thenReturn(needs);
@@ -80,8 +115,31 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testcreateNewNeed() throws IOException {
-         Need newNeed = new Need(1, "New Need", 30, 300, "Food");
+    void testSearchNeeds_NeedNotFound() {
+        when(cupboard.findNeeds("Test")).thenReturn(null);
+
+        ResponseEntity<Need[]> response = needController.searchNeeds("Test");
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    void testSearchNeeds_ThrowsError() {
+        String searchName = "TestName";
+        when(cupboard.findNeeds(searchName)).thenThrow(new RuntimeException("Test exception"));
+
+
+        ResponseEntity<Need[]> response = needController.searchNeeds(searchName);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+
+    @Test
+    void testcreateNewNeed_Success() throws IOException {
+        Need newNeed = new Need(1, "New Need", 30, 300, "Food");
         when(cupboard.createNeed(newNeed)).thenReturn(newNeed);
 
         ResponseEntity<Need> response = needController.createNeed(newNeed);
@@ -92,9 +150,9 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testcreateNewNeed_NeedAlreadyExists() throws IOException {
-         Need need1 = new Need(1, "New Need", 30, 300, "Food");
-         Need need2 = new Need(2, "New Need", 30, 300, "Food");
+    void testcreateNewNeed_Conflict() throws IOException {
+        Need need1 = new Need(1, "New Need", 30, 300, "Food");
+        Need need2 = new Need(2, "New Need", 30, 300, "Food");
         when(cupboard.createNeed(need1)).thenReturn(need1);
         when(cupboard.createNeed(need2)).thenReturn(null);
 
@@ -108,8 +166,21 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testupdateNeed_NeedExists() throws IOException{
-         Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
+    //to be fixed
+void testCreateNeed_ExceptionThrown() throws IOException {
+    Need need1 = new Need(1, "New Need", 30, 300, "Food");
+    when(cupboard.createNeed(need1)).thenThrow(new IOException("Test IO exception"));
+
+    ResponseEntity<Need> response = needController.createNeed(need1);
+
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertNull(response.getBody());
+}
+
+
+    @Test
+    void testupdateNeed_Success() throws IOException{
+        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
         when(cupboard.updateNeed(updatedNeed)).thenReturn(updatedNeed);
 
         ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
@@ -120,7 +191,7 @@ public class NeedsControllerTest {
 
     @Test
     void testupdateNeed_NeedDosntExist() throws IOException {
-         Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
+        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
         when(cupboard.updateNeed(updatedNeed)).thenReturn(null);
 
         ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
@@ -128,10 +199,20 @@ public class NeedsControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    
+    @Test
+    void testupdateNeed_ThrowsError() throws IOException{
+        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
+        when(cupboard.updateNeed(updatedNeed)).thenThrow(new IOException("Test IO exception"));
+
+        ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
 // 01001110 01100101 01110110 01100101 01110010 00100000 01100111 01101111 01101110 01101110 01100001
     @Test
-    void testDeleteNeedExists() throws IOException{
+    void testDeleteNeed_Success() throws IOException{
         int id = 1;
         when(cupboard.deleteNeed(id)).thenReturn(true);
         ResponseEntity<Need> response = needController.deleteNeed(id);
@@ -139,10 +220,19 @@ public class NeedsControllerTest {
     }
 
     @Test
-    void testDeleteNeedDosNotExist() throws IOException{
+    void testDeleteNeed_NeedDosNotExist() throws IOException{
         int id = 1;
         when(cupboard.deleteNeed(id)).thenReturn(false);
         ResponseEntity<Need> response = needController.deleteNeed(id);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteNeed_ThrowsError() throws IOException{
+        int id = 3;
+        when(cupboard.deleteNeed(id)).thenThrow(new RuntimeException("Test exception"));
+
+        ResponseEntity<Need> response = needController.deleteNeed(id);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }
