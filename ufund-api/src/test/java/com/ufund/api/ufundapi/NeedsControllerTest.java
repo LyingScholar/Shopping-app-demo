@@ -166,8 +166,7 @@ public class NeedsControllerTest {
     }
 
     @Test
-    //to be fixed
-void testCreateNeed_ExceptionThrown() throws IOException {
+    void testCreateNeed_ExceptionThrown() throws IOException {
     Need need1 = new Need(1, "New Need", 30, 300, "Food");
     when(cupboard.createNeed(need1)).thenThrow(new IOException("Test IO exception"));
 
@@ -221,7 +220,7 @@ void testCreateNeed_ExceptionThrown() throws IOException {
 
     @Test
     void testDeleteNeed_NeedDosNotExist() throws IOException{
-        int id = 1;
+        int id = 2;
         when(cupboard.deleteNeed(id)).thenReturn(false);
         ResponseEntity<Need> response = needController.deleteNeed(id);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
