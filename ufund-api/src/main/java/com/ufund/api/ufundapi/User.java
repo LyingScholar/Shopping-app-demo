@@ -52,7 +52,7 @@ public class User {
      */
     @Override
     public String toString() {
-        return String.format(STRING_FORMAT,name, admin);
+        return String.format(STRING_FORMAT,id,name, admin);
     }
 
 }
