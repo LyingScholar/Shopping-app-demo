@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
@@ -162,9 +163,50 @@ class UserControllerTest {
 
         ResponseEntity<User> response = userController.createUser(testUser);
 
+
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    void testLoginUnauthorized() throws Exception {
+        when(userDB.login(anyString())).thenReturn(1);
+
+        ResponseEntity<User> response = userController.login("testUser");
+
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
+    @Test
+    void testLoginConflict() throws Exception {
+        when(userDB.login(anyString())).thenReturn(2);
+
+        ResponseEntity<User> response = userController.login("testUser");
+
+        
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+
+    @Test
+    void testLoginSuccess() throws Exception {
+        when(userDB.login(anyString())).thenReturn(0);
+
+        ResponseEntity<User> response = userController.login("testUser");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void testLoginException() throws Exception {
+        when(userDB.login(anyString())).thenThrow(new RuntimeException("Test exception"));
+
+        ResponseEntity<User> response = userController.login("testUser");
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+
 
 
     @Test
