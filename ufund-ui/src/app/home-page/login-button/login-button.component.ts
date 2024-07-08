@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LinloutService } from '../../linlout.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-button',
@@ -19,7 +20,7 @@ export class LoginButtonComponent {
     width: '75px',
   }
 
-  constructor(private linloutService: LinloutService) {
+  constructor(private linloutService: LinloutService, private router: Router) {
     this.linloutService.text$.subscribe(text => {
       this.text = text;
     });
@@ -28,5 +29,8 @@ export class LoginButtonComponent {
   swapLinLout(): void {
     const newText = this.text === 'LOGIN' ? 'LOGOUT' : 'LOGIN';
     this.linloutService.setText(newText);
+    if (this.text == 'LOGOUT') {
+      this.router.navigate(['/login-page']);
+    }
   }
 }
