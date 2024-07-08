@@ -118,6 +118,8 @@ This section describes the web interface flow; this is how the user views and in
 
 ### ViewModel Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
+> NeedsController: Connects the Need model to the application using REST API
+> UserController: Connects the User model to the application using REST API
 
 > _**[Sprint 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
@@ -130,10 +132,13 @@ This section describes the web interface flow; this is how the user views and in
 
 ### Model Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
+> Need: The model for a singular need that users can create. 
+> User: The model for a singular user that is either a Helper or Manager.
 
 > _**[Sprint 2, 3 & 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
+> The model tier, consisting of the Need class and User class, creates the foundation for the Need and User features that have the functionality to be used for other tiers.
 
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
