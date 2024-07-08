@@ -107,9 +107,9 @@ public class UserController {
      * Example: Find all Useres that contain the text "ma"
      * GET http://localhost:8080/Useres/?name=ma
      */
-    @GetMapping("/")
+    @GetMapping("/search/")
     public ResponseEntity<User[]> searchUsers(@RequestParam(required=false) String name) {
-        LOG.info("GET /Users/?name="+name);
+        LOG.info("GET /Users/search/?name="+name);
         
         try {
             User[] Users = UserDB.findUsers(name);
@@ -158,9 +158,9 @@ public class UserController {
      * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
      * ResponseEntity with HTTP status of UNAUTHORIZED if user doesn't exist<br>
      */
-    @PutMapping("")
-    public ResponseEntity<User> login(@RequestBody String username) {
-        LOG.info("PUT /Users " + username);
+    @GetMapping("/")
+    public ResponseEntity<User> login(@RequestParam(required=false) String username) {
+        LOG.info("GET /Users/?username=" + username);
 
         try {
             int status = UserDB.login(username);
