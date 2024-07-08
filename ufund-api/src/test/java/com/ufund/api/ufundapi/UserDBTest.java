@@ -5,238 +5,177 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UserDBTest {
+class UserDBTest {
 
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing each value of each user to verify read, write capabilities
-     * also tested all users get retrieved successfully
-     */
-    @Test
-    public void testGetAllUsers() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        User[] initialUsers = {
-            new User(1, "User 1", false),
-            new User(2, "User 2", true),
-             new User(3, "User 3", false)
-        };
-        
-        objectMapper.writeValue(testFile, initialUsers);
-        
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-        
-        User[] retrievedUsers = userDB.getUsers();
-        
-        assertEquals(3, retrievedUsers.length);
-        
-        assertEquals(1, retrievedUsers[0].getId());
-        assertEquals("User 1", retrievedUsers[0].getName());
-        assertFalse(retrievedUsers[0].isAdmin());
-        
-        assertEquals(2, retrievedUsers[1].getId());
-        assertEquals("User 2", retrievedUsers[1].getName());
-        assertTrue(retrievedUsers[1].isAdmin());
-        
-        assertEquals(3, retrievedUsers[2].getId());
-        assertEquals("User 3", retrievedUsers[2].getName());
-        assertFalse(retrievedUsers[2].isAdmin());
+    @Mock
+    private ObjectMapper objectMapper;
+
+    private UserDB userDB;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        MockitoAnnotations.openMocks(this);
+        when(objectMapper.readValue(any(File.class), eq(User[].class))).thenReturn(new User[]{});
+        userDB = new UserDB("test.json", objectMapper);
     }
-    
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing each value of each user to verify find capabilities
-     * also tested all users get found successfully
-     */
+
     @Test
-    public void testFindUsers() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
+    void testLogin_UserDoesNotExist() {
+        int result = userDB.login("nonexistantUser");
+        assertEquals(1, result);
+    }
+
+
+    @Test
+    void testLogin_UserAlreadyLoggedIn() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
+        userDB.login("testUser");
+        int result = userDB.login("testUser");
+        assertEquals(2, result);
+    }
+
+
+    @Test
+    void testLogin_SuccessfulLogin() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
+        int result = userDB.login("testUser");
+        assertEquals(3, result);
+    }
+
+    @Test
+    void testGetUsers() throws IOException {
+        User user1 = new User(1, "user1", false);
+        User user2 = new User(2, "user2", true);
+        userDB.createUser(user1);
+        userDB.createUser(user2);
+
+        User[] users = userDB.getUsers();
+        assertEquals(2, users.length);
+        assertEquals("user1", users[0].getName());
+        assertEquals("user2", users[1].getName());
+    }
+
+    @Test
+    void testFindUsers() throws IOException {
+        User user1 = new User(1, "user1", false);
+        User user2 = new User(2, "user2", true);
+        User user3 = new User(3, "admin", true);
+        userDB.createUser(user1);
+        userDB.createUser(user2);
+        userDB.createUser(user3);
+
+        User[] foundUsers = userDB.findUsers("user");
         
-        ObjectMapper objectMapper = new ObjectMapper();
-        
-        User[] testUsers = {
-            new User(1, "User 1A", false),
-            new User(2, "User 2" , true),
-            new User(3, "User 1B" , false)
-        };
-        
-        objectMapper.writeValue(testFile, testUsers);
-        
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-        
-        User[] foundUsers = userDB.findUsers("User 1");
         
         assertEquals(2, foundUsers.length);
-
-        assertEquals(1, foundUsers[0].getId());
-        assertEquals("User 1A", foundUsers[0].getName());
-        assertFalse(foundUsers[0].isAdmin());
-        
-        assertEquals(3, foundUsers[1].getId());
-        assertEquals("User 1B", foundUsers[1].getName());
-        assertFalse(foundUsers[1].isAdmin());
-    }
-    
-    @Test
-    public void testCheckForAUser() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        User[] initialUsers = {
-            new User(1, "User 1", false),
-            new User(2, "User 2" , true)
-        };
-        objectMapper.writeValue(testFile, initialUsers);
-        
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-        
-        assertTrue(userDB.checkForAUser("User 1"));
-        assertFalse(userDB.checkForAUser("User 3"));
+        assertEquals("user1", foundUsers[0].getName());
+        assertEquals("user2", foundUsers[1].getName());
     }
 
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing each value of the required user
-     */
     @Test
-    public void testGetUser() throws IOException {
-        
-        File testFile  = File.createTempFile("test", ".json");
-        
-        ObjectMapper objectMapper = new ObjectMapper();
-        
-        User[] initialUsers = {
-            new User(1, "User 1", false),
-            new User(2, "User 2" , true),
-            new User(3, "User 3", false)
-        };
-        
-        objectMapper.writeValue(testFile, initialUsers);
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-        User retrievedUser = userDB.getUser(2);
-        
-        assertNotNull(retrievedUser);
-        
-        assertEquals(2, retrievedUser.getId());
-        assertEquals("User 2", retrievedUser.getName());
-        assertTrue(retrievedUser.isAdmin());
+    void testGetUser() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
+
+        User foundUser = userDB.getUser(1);
+        assertNotNull(foundUser);
+        assertEquals("testUser", foundUser.getName());
+
+
+        User nonexistantUser = userDB.getUser(2);
+        assertNull(nonexistantUser);
     }
 
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing the function, forcing it to search for non-existent user
-     */
     @Test
-    public void testGetUserNonExistent() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new  ObjectMapper();
-        User[] initialUsers = {
-            new User(1, "User 1", false)
-        };
+    void testGetUserByName() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
 
+        User foundUser = userDB.getUserByName("testUser");
+        assertNotNull(foundUser);
+        assertEquals(1, foundUser.getId());
 
-        objectMapper.writeValue(testFile, initialUsers);
-    
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-    
-        User retrievedUser = userDB.getUser(99);
-        assertNull(retrievedUser);
+        User nonexistantUser = userDB.getUserByName("nonexisentUser");
+        assertNull(nonexistantUser);
     }
 
+    @Test
+    void testCheckForAUser() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
 
+        assertTrue(userDB.checkForAUser("testUser"));
+        assertFalse(userDB.checkForAUser("nonexisentUser"));
+    }
 
     @Test
-    public void testCreateUser() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        User[] initialUsers = {};
-        objectMapper.writeValue(testFile, initialUsers);
-    
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-        User newUser = new User(0, "New User", true);
+    void testCheckForALoggedInUser() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
+        userDB.login("testUser");
+
+        assertTrue(userDB.checkForALoggedInUser("testUser"));
+        assertFalse(userDB.checkForALoggedInUser("nonexisentUser"));
+    }
+
+    @Test
+    void testCreateUser() throws IOException {
+        User newUser = new User(0, "newUser", false);
         User createdUser = userDB.createUser(newUser);
-    
+
         assertNotNull(createdUser);
-        assertEquals("New User", createdUser.getName());
-        assertTrue(createdUser.getId() > 0);
-        assertTrue(createdUser.isAdmin());
-    
-        // Try creating a duplicate user (should fail)
+        assertEquals("newUser", createdUser.getName());
+        assertNotEquals(0, createdUser.getId());
+
         User duplicateUser = userDB.createUser(newUser);
         assertNull(duplicateUser);
     }
 
 
-
-
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing deletion of a specific user
-     * also testing deletion of non existent user
-     */
     @Test
-    public void testDeleteUser() throws IOException {
-        File testFile  = File.createTempFile("test", ".json");
-        ObjectMapper objectMapper = new ObjectMapper();
+    void testUpdateUser() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
 
-        User[] initialUsers = {
-            new User(1, "User 1", false),
-            new User(2, "User 2", true),
-            new User(3, "User 3", false)
-        };
-        objectMapper.writeValue(testFile, initialUsers);
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
+        User updatedUser = new User(1, "updatedUser", true);
+        User result = userDB.updateUser(updatedUser);
 
-        boolean deleted = userDB.deleteUser(initialUsers[1].getId());
-        assertTrue(deleted);
-        assertNull(userDB.getUser((initialUsers[1]).getId()));
-       
-        deleted = userDB.deleteUser(initialUsers[1].getId());
-        assertFalse(deleted);
+        assertNotNull(result);
+        assertEquals("updatedUser", result.getName());
+        assertTrue(result.isAdmin());
+
+        User nonexistantUser = new User(2, "nonexistant", false);
+        User failedUpdate = userDB.updateUser(nonexistantUser);
+        assertNull(failedUpdate);
     }
 
 
 
-
-    /**
-     * @throws IOException
-     * created a test file to write sample users and act as UserDB
-     * testing addition of updating a user in the UserDB
-     * also testing updating non existent user
-     */
     @Test
-    public void testUpdateUser() throws IOException {
-        File testFile = File.createTempFile("test", ".json");
-        ObjectMapper  objectMapper = new ObjectMapper();
-        User[] initialUsers = {
-            new User(1, "User 1", false)
-        };
-        objectMapper.writeValue(testFile, initialUsers);
-    
-        UserDB userDB = new UserDB(testFile.getAbsolutePath(), objectMapper);
-    
-        User updatedUser  = new User(1, "Updated User", true);
-        User result = userDB.updateUser(updatedUser);
-    
-        assertNotNull(result);
-        assertEquals("Updated User", result.getName());
-        assertTrue(result.isAdmin());
-    
+    void testDeleteUser() throws IOException {
+        User user = new User(1, "testUser", false);
+        userDB.createUser(user);
 
+        boolean deleted = userDB.deleteUser(1);
+        assertTrue(deleted);
 
-        User nonExistentUser = new User(99, "Non-existent", false);
-        result = userDB.updateUser(nonExistentUser);
-        assertNull(result);
+        boolean failedDelete = userDB.deleteUser(2);
+        assertFalse(failedDelete);
     }
 }
