@@ -151,6 +151,33 @@ public class UserController {
     }
 
     /**
+     * Logs in the user with the provided username, if it is not already logged in
+     * 
+     * @param User The {@link User User} to update
+     * 
+     * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
+     * ResponseEntity with HTTP status of UNAUTHORIZED if user doesn't exist<br>
+     */
+    @PutMapping("")
+    public ResponseEntity<User> login(@RequestBody String username) {
+        LOG.info("PUT /Users " + username);
+
+        try {
+            int status = UserDB.login(username);
+            if (status == 1) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else if(status == 2) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * Updates the {@linkplain User User} with the provided {@linkplain User User} object, if it exists
      * 
      * @param User The {@link User User} to update
