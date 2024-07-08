@@ -13,23 +13,25 @@
     padding-bottom: 5px;
     padding-right: 30px;
     padding-left: 2px;
-    text-align: right;
     background: aquamarine;
     color: black;
     font-size: 12px;
     font-family: Verdana;
-    height: 60px;
+    height: 55px;
+    text-align: right;
 }
-.button {
+.sidebar {
+    height: 100%;
+    width: 125px;
     padding: 5px;
-    text-align: center;
+    position: fixed;
+    z-index: 1;
+    top: 1;
+    left: 1;
+    background: rgb(116, 230, 192);
+    overflow-x: hidden;
+    padding-top: 20px; 
     font-size: 16px;
-    margin: 0px;
-    cursor: pointer;
     font-family: Verdana;
-    background: rgb(106, 212, 177);
-}
-.login {
-    height: 15px;
-    width: 80px;
+    text-align: left;
 }

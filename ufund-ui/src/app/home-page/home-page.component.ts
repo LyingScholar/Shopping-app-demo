@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-
-import {Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {switchMap } from 'rxjs/operators';
-
+import { LoginButtonComponent } from './login-button/login-button.component';
+import { MiniNeedBasketComponent } from './mini-need-basket/mini-need-basket.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [LoginButtonComponent, MiniNeedBasketComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
