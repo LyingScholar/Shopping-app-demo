@@ -9,16 +9,18 @@ geometry: margin=1in
 > and appear in the generated PDF in italics but do so only **after** all team members agree that the requirements for that section and current Sprint have been met. **Do not** delete future Sprint expectations._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: Team 2
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Rushil Patel
+  * Jacob Eggleston
+  * Quinton
+  * Micheal
 
 ## Executive Summary
 
-This is a summary of the project.
+> This project addresses the challenges faced by organizations in connecting with helpers to fulfill their needs. The MVP includes basic authentication, helper functionalities to view,
+> search, and manage needs, and needs management for U-fund Managers. This software application aims to provide non-profits with an efficient and reliable platform to manage and meet 
+> their needs.
 
 ### Purpose
 >  _**[Sprint 2 & 4]** Provide a very brief statement about the project and the most
@@ -39,12 +41,19 @@ This section describes the features of the application.
 > _In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
+> A helper is able to see and search for needs, while being able to add needs to their own funding basket and checking it out. 
+> A Manager can add, edit, or remove data from their cupboard.
+> A User is able to securely log in and out, while keeping their data stored in their profile. 
 
 ### Definition of MVP
 > _**[Sprint 2 & 4]** Provide a simple description of the Minimum Viable Product._
+> The MVP includes basic authentication, helper functionalities to view, search, and manage needs, and needs management for U-fund Managers.
 
 ### MVP Features
 >  _**[Sprint 4]** Provide a list of top-level Epics and/or Stories of the MVP._
+> As a Helper, I want to manage a list of needs, so that I can efficiently sort through my list of needs. 
+> As a User, I want to see different interfaces for the roles of Helper and U-Fund Manager, so that I can’t use other roles’ actions.
+> As a U-Fund Manager, I want to manage the needs in the needs cupboard, so that the important needs are available for Helpers. 
 
 ### Enhancements
 > _**[Sprint 4]** Describe what enhancements you have implemented for the project._
@@ -54,7 +63,7 @@ This section describes the features of the application.
 
 This section describes the application domain.
 
-![Domain Model](domain-model-placeholder.png)
+![Domain Model](domain-model.png)
 
 > _**[Sprint 2 & 4]** Provide a high-level overview of the domain for this application. You
 > can discuss the more important domain entities and their relationship
