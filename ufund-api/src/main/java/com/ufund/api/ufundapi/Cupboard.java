@@ -144,21 +144,8 @@ public class Cupboard {
      */
     
     public Need[] findNeeds(String containsText) {
-        synchronized(needs) {
+        synchronized(needs) { 
             return getNeedsArray(containsText);
-        }
-    }
-
-    /**
-    ** {@inheritDoc}
-     */
-    
-    public Need getNeed(int id) {
-        synchronized(needs) {
-            if (needs.containsKey(id))
-                return needs.get(id);
-            else
-                return null;
         }
     }
 
@@ -177,6 +164,19 @@ public class Cupboard {
     ** {@inheritDoc}
      */
     
+    public Need getNeed(int id) {
+        synchronized(needs) {
+            if (needs.containsKey(id))
+                return needs.get(id);
+            else
+                return null;
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    
     public Need createNeed(Need need) throws IOException {
         synchronized(needs) {
             // We create a new need object because the id field is immutable
@@ -188,7 +188,7 @@ public class Cupboard {
                 return newNeed;
             } else {
                 return null;
-            }
+            } 
         }
     }
 
