@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import {Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {switchMap } from 'rxjs/operators';
+
+
 @Component({
   selector: 'app-home-page',
   standalone: true,
