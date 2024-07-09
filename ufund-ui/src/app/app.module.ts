@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './home-page/home-page.component'
 import { AppRoutingModule } from './app-routing.module';
 import { HomePageModule } from './home-page.module';
+import { LoginPageModule } from './login-page.module';
+import { LoginPageComponent } from './login-page/login-page.component';
 
 
 @NgModule({
@@ -15,11 +17,13 @@ import { HomePageModule } from './home-page.module';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    HomePageModule
+    HomePageModule,
+    LoginPageModule
   ],
   declarations: [
     AppComponent,
-    HomePageComponent
+    HomePageComponent,
+    LoginPageComponent
   ],
   bootstrap: [ AppComponent ]
 })
