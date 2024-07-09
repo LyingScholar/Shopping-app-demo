@@ -32,6 +32,7 @@ their needs.
 | Term | Definition |
 |------|------------|
 | SPA | Single Page |
+| DB | Database |
 
 
 ## Requirements
@@ -41,18 +42,25 @@ This section describes the features of the application.
 > _In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
+
 A helper is able to see and search for needs, while being able to add needs to their own funding basket and checking it out. 
+
 A Manager can add, edit, or remove data from their cupboard.
+
 A User is able to securely log in and out, while keeping their data stored in their profile. 
 
 ### Definition of MVP
 > _**[Sprint 2 & 4]** Provide a simple description of the Minimum Viable Product._
+
 The MVP includes basic authentication, helper functionalities to view, search, and manage needs, and needs management for U-fund Managers.
 
 ### MVP Features
 >  _**[Sprint 4]** Provide a list of top-level Epics and/or Stories of the MVP._
+
 As a Helper, I want to manage a list of needs, so that I can efficiently sort through my list of needs. 
+
 As a User, I want to see different interfaces for the roles of Helper and U-Fund Manager, so that I can’t use other roles’ actions.
+
 As a U-Fund Manager, I want to manage the needs in the needs cupboard, so that the important needs are available for Helpers. 
 
 ### Enhancements
@@ -68,6 +76,8 @@ This section describes the application domain.
 > _**[Sprint 2 & 4]** Provide a high-level overview of the domain for this application. You
 > can discuss the more important domain entities and their relationship
 > to each other._
+
+There are three main components of the domain model: Helper, Manager, and Need. Between these relationships are more entities that are used by either of three main entities in varying relationships. A Need can be placed into a Needs Cupboard, while a Manager can edit the Need and a Helper can view the Need. A Need can be placed into a funding backet by a Helper, who can checkout with that Need. All these relationships belong in a Non-Profit company, who has a page on a U-Fund server that needs a username for a Helper or Manager to login. 
 
 
 ## Architecture and Design
@@ -118,7 +128,9 @@ This section describes the web interface flow; this is how the user views and in
 
 ### ViewModel Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
+
 NeedsController: Connects the Need model to the application using REST API
+
 UserController: Connects the User model to the application using REST API
 
 > _**[Sprint 4]** Provide a summary of this tier of your architecture. This
@@ -128,12 +140,18 @@ UserController: Connects the User model to the application using REST API
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
 > 
-![Replace with your ViewModel Tier class diagram 1, etc.](model-placeholder.png)
+![](model-placeholder.png)
 
 ### Model Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
+
 Need: The model for a singular need that users can create. 
+
+Cupboard: Acts as the Needs Data Persistence such that there can be a list of needs managed and sychronized with the Controller. It hold the MVP functional resposibilities of actions on a Need. 
+
 User: The model for a singular user that is either a Helper or Manager.
+
+UserDB: Is the User Data Persistence holding a list of users in the U-Fund server. It contains the functions that the UserController will need to communicate with the application.
 
 > _**[Sprint 2, 3 & 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
@@ -143,7 +161,7 @@ The model tier, consisting of the Need class and User class, creates the foundat
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
 > 
-![Replace with your Model Tier class diagram 1, etc.](model-placeholder.png)
+![](model-placeholder.png)
 
 ## OO Design Principles
 
@@ -174,6 +192,9 @@ We also used the Controller principle to connect the model to the application se
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
+As of Sprint 2, all user stories have passed all their acceptance criteria tests and none are having errors.
+Issues found during acceptance testing: The user search functionality is case-sensitive, which was not specified in the initial requirements.
+Concern: The case sensitivity issue needs to be addressed before the final release.
 
 ### Unit Testing and Code Coverage
 > _**[Sprint 4]** Discuss your unit testing strategy. Report on the code coverage
@@ -183,6 +204,12 @@ We also used the Controller principle to connect the model to the application se
 
 >_**[Sprint 2, 3 & 4]** **Include images of your code coverage report.** If there are any anomalies, discuss
 > those._
+Our unit testing strategy focused on comprehensive coverage of all the methods, including edge cases and concurrency scenarios. We aimed high (90%) to ensure robustness and reliability in this core functionality.
+We achieved 100% code coverage for the Need, Need Controller User and UserController classes, exceeding our target. Even on the remaining files out coverage was >97%. This high coverage ensures that most scenarios, including error cases and edge conditions, are tested.
+However, we noted that some complex concurrency scenarios were challenging to test comprehensively, which is an area for future improvement.
+Anomaly: While overall coverage is high, we noticed that some exception handling code paths were not fully exercised. In future iterations, we plan to introduce more fault injection tests to cover these scenarios.
+![Domain Model](sprint-2-code-coverage.png)
+
 
 ## Ongoing Rationale
 >_**[Sprint 1, 2, 3 & 4]** Throughout the project, provide a time stamp **(yyyy/mm/dd): Sprint # and description** of any _**mayor**_ team decisions or design milestones/changes and corresponding justification._
