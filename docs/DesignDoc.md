@@ -18,9 +18,9 @@ geometry: margin=1in
 
 ## Executive Summary
 
-> This project addresses the challenges faced by organizations in connecting with helpers to fulfill their needs. The MVP includes basic authentication, helper functionalities to view,
-> search, and manage needs, and needs management for U-fund Managers. This software application aims to provide non-profits with an efficient and reliable platform to manage and meet 
-> their needs.
+This project addresses the challenges faced by organizations in connecting with helpers to fulfill their needs. The MVP includes basic authentication, helper functionalities to view,
+search, and manage needs, and needs management for U-fund Managers. This software application aims to provide non-profits with an efficient and reliable platform to manage and meet 
+their needs.
 
 ### Purpose
 >  _**[Sprint 2 & 4]** Provide a very brief statement about the project and the most
@@ -41,19 +41,19 @@ This section describes the features of the application.
 > _In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
-> A helper is able to see and search for needs, while being able to add needs to their own funding basket and checking it out. 
-> A Manager can add, edit, or remove data from their cupboard.
-> A User is able to securely log in and out, while keeping their data stored in their profile. 
+A helper is able to see and search for needs, while being able to add needs to their own funding basket and checking it out. 
+A Manager can add, edit, or remove data from their cupboard.
+A User is able to securely log in and out, while keeping their data stored in their profile. 
 
 ### Definition of MVP
 > _**[Sprint 2 & 4]** Provide a simple description of the Minimum Viable Product._
-> The MVP includes basic authentication, helper functionalities to view, search, and manage needs, and needs management for U-fund Managers.
+The MVP includes basic authentication, helper functionalities to view, search, and manage needs, and needs management for U-fund Managers.
 
 ### MVP Features
 >  _**[Sprint 4]** Provide a list of top-level Epics and/or Stories of the MVP._
-> As a Helper, I want to manage a list of needs, so that I can efficiently sort through my list of needs. 
-> As a User, I want to see different interfaces for the roles of Helper and U-Fund Manager, so that I can’t use other roles’ actions.
-> As a U-Fund Manager, I want to manage the needs in the needs cupboard, so that the important needs are available for Helpers. 
+As a Helper, I want to manage a list of needs, so that I can efficiently sort through my list of needs. 
+As a User, I want to see different interfaces for the roles of Helper and U-Fund Manager, so that I can’t use other roles’ actions.
+As a U-Fund Manager, I want to manage the needs in the needs cupboard, so that the important needs are available for Helpers. 
 
 ### Enhancements
 > _**[Sprint 4]** Describe what enhancements you have implemented for the project._
@@ -118,8 +118,8 @@ This section describes the web interface flow; this is how the user views and in
 
 ### ViewModel Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
-> NeedsController: Connects the Need model to the application using REST API
-> UserController: Connects the User model to the application using REST API
+NeedsController: Connects the Need model to the application using REST API
+UserController: Connects the User model to the application using REST API
 
 > _**[Sprint 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
@@ -132,13 +132,13 @@ This section describes the web interface flow; this is how the user views and in
 
 ### Model Tier
 > _**[Sprint 1]** List the classes supporting this tier and provide a description of there purpose._
-> Need: The model for a singular need that users can create. 
-> User: The model for a singular user that is either a Helper or Manager.
+Need: The model for a singular need that users can create. 
+User: The model for a singular user that is either a Helper or Manager.
 
 > _**[Sprint 2, 3 & 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
-> The model tier, consisting of the Need class and User class, creates the foundation for the Need and User features that have the functionality to be used for other tiers.
+The model tier, consisting of the Need class and User class, creates the foundation for the Need and User features that have the functionality to be used for other tiers.
 
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
@@ -148,6 +148,9 @@ This section describes the web interface flow; this is how the user views and in
 ## OO Design Principles
 
 > _**[Sprint 1]** Name and describe the initial OO Principles that your team has considered in support of your design (and implementation) for this first Sprint._
+We used the Information Expert principle to make sure we each class has it's responsibility and no others, making the controllers easier to make. 
+We also used the Controller principle to connect the model to the application seemlessly.
+> 
 
 > _**[Sprint 2, 3 & 4]** Will eventually address upto **4 key OO Principles** in your final design. Follow guidance in augmenting those completed in previous Sprints as indicated to you by instructor. Be sure to include any diagrams (or clearly refer to ones elsewhere in your Tier sections above) to support your claims._
 
