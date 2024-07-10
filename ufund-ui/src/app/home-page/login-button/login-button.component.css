@@ -10,6 +10,9 @@
     cursor: pointer;
     font-family: Verdana;
     background: rgb(106, 212, 177);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
 }
 .login_button:hover {
     background: rgb(79, 167, 139);
