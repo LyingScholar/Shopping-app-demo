@@ -13,8 +13,8 @@ geometry: margin=1in
 * Team members
   * Rushil Patel
   * Jacob Eggleston
-  * Quinton
-  * Micheal
+  * Quinton Miller
+  * Micheal Bhardwaj
 
 ## Executive Summary
 

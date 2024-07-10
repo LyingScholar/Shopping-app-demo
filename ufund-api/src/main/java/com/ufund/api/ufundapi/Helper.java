@@ -1,0 +1,33 @@
+package com.ufund.api.ufundapi;
+
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Helper extends User {
+
+    private static final Logger LOG = Logger.getLogger(Helper.class.getName());
+
+    @JsonProperty("fundingBasket") private Need[] fundingBasket;
+
+    /**
+     * Create a Helper with the given id, name, admin status, skills, and availability
+     * @param id The id of the Helper
+     * @param name The name of the Helper
+     * @param admin The admin status of the Helper
+     * 
+     * {@literal @}JsonProperty is used in serialization and deserialization
+     * of the JSON object to the Java object in mapping the fields.
+     */
+    public Helper(@JsonProperty("id") int id, 
+                  @JsonProperty("name") String name, 
+                  @JsonProperty("admin") boolean admin,
+                  @JsonProperty("fundingBasket") Need[] fundingBasket) {
+        super(id, name, admin);
+        this.fundingBasket = fundingBasket;
+    }
+
+    public Need[] getFundingBasket() {
+        return this.fundingBasket;
+    }
+}
