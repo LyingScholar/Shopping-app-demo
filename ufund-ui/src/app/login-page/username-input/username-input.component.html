@@ -21,7 +21,7 @@
             <small *ngIf="usernameInput.errors?.['minlength']">Username must be at least 3 characters long.</small>
         </div>
         </div>
-        <button type="submit" [disabled]="loginForm.form.invalid">Login</button>
+        <button class = "login_button" type="submit" [disabled]="loginForm.form.invalid">Login</button>
     </form>
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 </div>
