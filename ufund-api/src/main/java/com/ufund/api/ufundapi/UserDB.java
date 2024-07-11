@@ -232,6 +232,21 @@ public class UserDB {
         }
     }
 
+    public Helper createHelper(Helper helper) throws IOException {
+        synchronized(users) {
+            // We create a new user object because the id field is immutable
+            // and we user to assign the next unique id
+            if (!checkForAUser(helper.getName())) {
+                Helper newHelper = new Helper(nextId(),helper.getName(), helper.isAdmin());
+                users.put(newHelper.getId(),newHelper);
+                save(); // may throw an IOException
+                return newHelper;
+            } else {
+                return null;
+            }
+        }
+    }
+
     /**
     ** {@inheritDoc}
      */

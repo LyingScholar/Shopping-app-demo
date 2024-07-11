@@ -1,5 +1,6 @@
 package com.ufund.api.ufundapi;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +9,7 @@ public class Helper extends User {
 
     private static final Logger LOG = Logger.getLogger(Helper.class.getName());
 
-    @JsonProperty("fundingBasket") private Need[] fundingBasket;
+    @JsonProperty("fundingBasket") private ArrayList<Need> fundingBasket;
 
     /**
      * Create a Helper with the given id, name, admin status, skills, and availability
@@ -21,13 +22,21 @@ public class Helper extends User {
      */
     public Helper(@JsonProperty("id") int id, 
                   @JsonProperty("name") String name, 
-                  @JsonProperty("admin") boolean admin,
-                  @JsonProperty("fundingBasket") Need[] fundingBasket) {
+                  @JsonProperty("admin") boolean admin) {
         super(id, name, admin);
-        this.fundingBasket = fundingBasket;
+        this.fundingBasket = new ArrayList<Need>();
     }
 
-    public Need[] getFundingBasket() {
+    public ArrayList<Need> getFundingBasket() {
         return this.fundingBasket;
+    }
+
+    public void addNeed(Need need) {
+        fundingBasket.add(need);
+    }
+
+    @Override
+    public String toString() {
+        return "Helper";
     }
 }
