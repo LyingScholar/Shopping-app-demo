@@ -1,6 +1,6 @@
 <button 
     class = "login_button" 
-    (click)="swapLinLout()"
+    (click)="swapPage()"
     [ngClass]="{'lin-class': text === 'LOGIN','lout-class': text === 'LOGOUT'}"
     [ngStyle]="text === 'LOGIN' ? linWidth : loutWidth">
     {{ text }}

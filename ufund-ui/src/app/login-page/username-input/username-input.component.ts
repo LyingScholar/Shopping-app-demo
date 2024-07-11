@@ -5,6 +5,7 @@ import { catchError, takeUntil } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LinloutService } from '../../linlout.service';
+import { HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -37,25 +38,14 @@ export class UsernameInputComponent implements OnDestroy {
 
   loginWithJava(username: string): void {
     this.errorMessage = '';
-    this.linlout.callLogin(username)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(error => {
-          console.error('Login error:', error);
-          this.errorMessage = 'An error occurred. Please try again later.';
-          return throwError(() => error);
-        })
-      )
-      .subscribe({
-        next: (response: number) => {
-          if (response === 200) {
-            this.router.navigate(['/home-page']);
-          } else {
-            this.errorMessage = 'Login failed. Please try again.';
-          }
-        }
-      });
+    if (this.linlout.callLogin(username)) {
+      this.linlout.setText('LOGOUT');
+      this.router.navigate(['/home-page']);
+    } else {
+      this.errorMessage = 'Login failed. Please try again.'
     }
+  }
+  
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

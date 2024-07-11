@@ -26,11 +26,7 @@ export class LoginButtonComponent {
     });
   }
 
-  swapLinLout(): void {
-    const newText = this.text === 'LOGIN' ? 'LOGOUT' : 'LOGIN';
-    this.linloutService.setText(newText);
-    if (this.text == 'LOGOUT') {
-      this.router.navigate(['/login-page']);
-    }
+  swapPage(): void {
+    this.router.navigate(['/login-page']);
   }
 }
