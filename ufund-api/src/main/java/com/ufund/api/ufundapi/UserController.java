@@ -158,12 +158,39 @@ public class UserController {
      * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
      * ResponseEntity with HTTP status of UNAUTHORIZED if user doesn't exist<br>
      */
-    @GetMapping("/")
+    @GetMapping("/login")
     public ResponseEntity<User> login(@RequestParam(required=false) String username) {
         LOG.info("GET /Users/?username=" + username);
 
         try {
             int status = UserDB.login(username);
+            if (status == 1) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else if(status == 2) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Logs out the user with the provided username, if it is already logged in
+     * 
+     * @param User The {@link User User} to update
+     * 
+     * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
+     * ResponseEntity with HTTP status of UNAUTHORIZED if user doesn't exist<br>
+     */
+    @GetMapping("/logout")
+    public ResponseEntity<User> logout(@RequestParam(required=false) String username) {
+        LOG.info("GET /Users/?username=" + username);
+
+        try {
+            int status = UserDB.logout(username);
             if (status == 1) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else if(status == 2) {

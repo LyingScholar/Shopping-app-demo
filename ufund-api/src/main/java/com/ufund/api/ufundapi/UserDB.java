@@ -21,6 +21,7 @@ public class UserDB {
     Map<Integer,User> users;   // Provides a local cache of the user objects
                                 // so that we don't user to read from the file
                                 // each time
+    Map<Integer,Helper> helpers;
     private List<User> loggedInUsers; // Provides a list of users that are logged in
     private ObjectMapper objectMapper;  // Provides conversion between User
                                         // objects and JSON text format written
@@ -99,6 +100,25 @@ public class UserDB {
             return 3;
         }
     }
+
+    public int logout(String username) {
+        // User doesn't exist
+        if (checkForAUser(username) == false) {
+            return 1;
+        // User hasn't logged in
+        } else if (checkForALoggedInUser(username) == false) {
+            return 2;
+        // User logged out successfully
+        } else {
+            for (User user : loggedInUsers) {
+                if (user.getName().equals(username)) {
+                    loggedInUsers.remove(user);
+                }
+            }
+            return 3;
+        }
+    }
+
     /**
      * Saves the {@linkplain User users} from the map into the file as an array of JSON objects
      * 
@@ -128,6 +148,7 @@ public class UserDB {
     private boolean load() throws IOException {
         users = new TreeMap<>();
         loggedInUsers = new ArrayList<>();
+        helpers = new TreeMap<>();
         nextId = 0;
 
         // Deserializes the JSON objects from the file into an array of users
@@ -174,6 +195,15 @@ public class UserDB {
         synchronized(users) {
             if (users.containsKey(id))
                 return users.get(id);
+            else
+                return null;
+        }
+    }
+
+    public Helper getHelper(int id) {
+        synchronized(helpers) {
+            if (helpers.containsKey(id))
+                return helpers.get(id);
             else
                 return null;
         }
@@ -239,6 +269,7 @@ public class UserDB {
             if (!checkForAUser(helper.getName())) {
                 Helper newHelper = new Helper(nextId(),helper.getName(), helper.isAdmin());
                 users.put(newHelper.getId(),newHelper);
+                helpers.put(newHelper.getId(), newHelper);
                 save(); // may throw an IOException
                 return newHelper;
             } else {

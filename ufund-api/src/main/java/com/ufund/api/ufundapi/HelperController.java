@@ -46,36 +46,36 @@ public class HelperController {
         this.userDB = userDB;
     }
 
-    // @GetMapping("")
-    // public ResponseEntity<Need[]> viewNeeds() {
-    //     LOG.info("GET /Helper");
-    //     try {
-    //         Need[] cupboardNeeds = cupboard.getNeeds();
-    //         if (cupboardNeeds != null)
-    //             return new ResponseEntity<Need[]>(cupboardNeeds,HttpStatus.OK);
-    //         else
-    //             return new ResponseEntity<>(HttpStatus.CONFLICT);
-    //     } catch (Exception e) {
-    //         LOG.log(Level.SEVERE,e.getLocalizedMessage());
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @GetMapping("/needs")
+    public ResponseEntity<Need[]> viewNeeds() {
+        LOG.info("GET /Helper");
+        try {
+            Need[] cupboardNeeds = cupboard.getNeeds();
+            if (cupboardNeeds != null)
+                return new ResponseEntity<Need[]>(cupboardNeeds,HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-    // @GetMapping("/")
-    // public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
-    //     LOG.info("GET /Helper/?name="+name);
+    @GetMapping("/needs/search/")
+    public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
+        LOG.info("GET /Helper/?name="+name);
         
-    //     try {
-    //         Need[] needs = cupboard.findNeeds(name);
-    //         if (needs != null)
-    //             return new ResponseEntity<>(needs,HttpStatus.OK);
-    //         else
-    //             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    //     } catch (Exception e) {
-    //         LOG.log(Level.SEVERE,e.getLocalizedMessage());
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+        try {
+            Need[] needs = cupboard.findNeeds(name);
+            if (needs != null)
+                return new ResponseEntity<>(needs,HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @PostMapping("")
     public ResponseEntity<User> createHelper(@RequestBody Helper helper) {
         LOG.info("POST /Helper " + helper);
@@ -94,18 +94,17 @@ public class HelperController {
         
     }
 
-    @GetMapping("/")
+    @GetMapping("/fundingBasket/")
     public ResponseEntity<ArrayList<Need>> viewFundingBasket(@RequestParam(required=true) int userId) {
         LOG.info("GET /Helper/?userId="+userId);
         
         try {
-            User user = userDB.getUser(userId);
-            if (user == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } else if (!(user instanceof Helper)) {
+            Helper helper = userDB.getHelper(userId);
+            if (helper == null) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else if (!(helper instanceof Helper)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             } else {
-                Helper helper = (Helper) user;
                 ArrayList<Need> fundingBasket = helper.getFundingBasket();
                 if (fundingBasket != null)
                     return new ResponseEntity<>(fundingBasket,HttpStatus.OK);
@@ -118,7 +117,7 @@ public class HelperController {
         }
     }
 
-    @PutMapping("/{userId}/{needId}")
+    @PutMapping("/fundingBasket/{userId}/{needId}")
     public ResponseEntity<Need> addNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
         LOG.info("PUT /Helper/" + userId + "/" + needId);
 
