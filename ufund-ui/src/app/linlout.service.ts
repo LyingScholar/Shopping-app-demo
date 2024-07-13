@@ -20,7 +20,7 @@ export class LinloutService {
     this.textSubject.next(newText);
   }
 
-  callLogin(text: string): boolean {
+  callLogin(text: string): number {
     this.http.post<any>('${http://localhost:8080}login', text, {observe: 'response'})
       .subscribe((response: HttpResponse<any>) => {
         this.latestResponseStatus = response.status;
@@ -28,10 +28,8 @@ export class LinloutService {
         console.error('Error',error);
         this.latestResponseStatus = 500;
       });
-      if (this.latestResponseStatus == 200) {
-        return true;
-      } else {
-        return false;
-      }
+      var toReturn = this.latestResponseStatus;
+      this.latestResponseStatus = 0;
+      return toReturn;
   }
 }

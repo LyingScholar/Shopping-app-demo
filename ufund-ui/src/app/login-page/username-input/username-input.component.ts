@@ -38,11 +38,12 @@ export class UsernameInputComponent implements OnDestroy {
 
   loginWithJava(username: string): void {
     this.errorMessage = '';
-    if (this.linlout.callLogin(username)) {
+    var response: number = this.linlout.callLogin(username);
+    if (response == 200) {
       this.linlout.setText('LOGOUT');
       this.router.navigate(['/home-page']);
     } else {
-      this.errorMessage = 'Login failed. Please try again.'
+      this.errorMessage = 'Login failed. Please try again. Error: ' + response;
     }
   }
   
