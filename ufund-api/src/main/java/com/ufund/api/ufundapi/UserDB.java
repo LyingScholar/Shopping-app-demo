@@ -113,6 +113,7 @@ public class UserDB {
             for (User user : loggedInUsers) {
                 if (user.getName().equals(username)) {
                     loggedInUsers.remove(user);
+                    break;
                 }
             }
             return 3;

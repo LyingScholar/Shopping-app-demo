@@ -160,7 +160,7 @@ public class UserController {
      */
     @GetMapping("/login")
     public ResponseEntity<User> login(@RequestParam(required=false) String username) {
-        LOG.info("GET /Users/?username=" + username);
+        LOG.info("GET /Users/login/?username=" + username);
 
         try {
             int status = UserDB.login(username);
@@ -187,10 +187,11 @@ public class UserController {
      */
     @GetMapping("/logout")
     public ResponseEntity<User> logout(@RequestParam(required=false) String username) {
-        LOG.info("GET /Users/?username=" + username);
+        LOG.info("GET /Users/logout/?username=" + username);
 
         try {
             int status = UserDB.logout(username);
+            System.out.println(status);
             if (status == 1) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else if(status == 2) {
