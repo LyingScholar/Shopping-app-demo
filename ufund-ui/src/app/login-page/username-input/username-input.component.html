@@ -1,0 +1,27 @@
+<div class="username-input-container">
+<h2>Login</h2>
+    <form (ngSubmit)="attemptLogin()" #loginForm="ngForm">
+        
+        <div class="form-group">
+
+        <label for="username">Username:</label>
+        <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="username"
+            required
+            minlength="3"
+            #usernameInput="ngModel"
+        >
+
+
+        <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="error-message">
+            <small *ngIf="usernameInput.errors?.['required']">Username is required.</small>
+            <small *ngIf="usernameInput.errors?.['minlength']">Username must be at least 3 characters long.</small>
+        </div>
+        </div>
+        <button class = "login_button" type="submit" [disabled]="loginForm.form.invalid">Login</button>
+    </form>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>

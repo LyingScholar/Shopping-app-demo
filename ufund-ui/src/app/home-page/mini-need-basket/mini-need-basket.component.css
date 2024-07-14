@@ -1,0 +1,8 @@
+.lin-class {
+    display: none;
+    visibility: hidden;
+}
+.lout-class {
+    display: block;
+    visibility: visible;
+}

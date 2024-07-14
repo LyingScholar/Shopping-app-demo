@@ -1,0 +1,25 @@
+.login_button {
+    padding: 2px;
+    height: 28px;
+    z-index: 1;
+    top: 1;
+    right: 1;
+    text-align: center;
+    font-size: 16px;
+    margin: 0px;
+    cursor: pointer;
+    font-family: Verdana;
+    background: rgb(106, 212, 177);
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+}
+.login_button:hover {
+    background: rgb(79, 167, 139);
+}
+.lin-class {
+    width: 65px;
+}
+.lout-class {
+    width: 75px;
+}
