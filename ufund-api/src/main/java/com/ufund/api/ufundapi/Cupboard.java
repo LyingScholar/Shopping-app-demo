@@ -71,16 +71,20 @@ public class Cupboard {
      */
     private Need[] getNeedsArray(String containsText) { // if containsText == null, no filter
         ArrayList<Need> needArrayList = new ArrayList<>();
-
+        int num_needs = 0;
         for (Need need : needs.values()) {
             if (!(containsText == null) && need.getName().contains(containsText)) {
                 needArrayList.add(need);
+                num_needs++;
             }
         }
-
-        Need[] needArray = new Need[needArrayList.size()];
-        needArrayList.toArray(needArray);
-        return needArray;
+        if (num_needs == 0) {
+            return null;
+        } else {
+            Need[] needArray = new Need[needArrayList.size()];
+            needArrayList.toArray(needArray);
+            return needArray;
+        }
     }
 
     /**
