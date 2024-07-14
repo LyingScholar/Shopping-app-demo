@@ -206,7 +206,7 @@ public class UserController {
     }
 
     /**
-     * Updates the {@linkplain User User} with the provided {@linkplain User User} object, if it exists
+     * Updates the {@linkplain User User} wih the provided {@linkplain User User} object, if it exists
      * 
      * @param User The {@link User User} to update
      * 
