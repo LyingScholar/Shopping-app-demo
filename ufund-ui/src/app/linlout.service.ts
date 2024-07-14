@@ -37,7 +37,7 @@ export class LinloutService {
   async callLogin(text: string): Promise<number> {
     try {
       const response: HttpResponse<any> = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/Users/login/?username=${text}`, {observe: 'response' })
+        this.http.post<any>(`${this.apiUrl}/User/login/?username=${text}`, {observe: 'response' })
       );
       return response.status;
     } catch (error) {
