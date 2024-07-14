@@ -11,7 +11,6 @@ export class LinloutService {
   private textSubject = new BehaviorSubject<string>('LOGIN');
   text$ = this.textSubject.asObservable();
 
-  private latestResponseStatus = 0;
 
   private apiUrl = 'http://localhost:8080';
 
@@ -24,7 +23,7 @@ export class LinloutService {
   async callLogin(text: string): Promise<number> {
     try {
       const response: HttpResponse<any> = await firstValueFrom(
-        this.http.post<any>(`${this.apiUrl}/User/login/?username=${text}`, {observe: 'response' })
+        this.http.get<any>(`${this.apiUrl}/Users/login/?username=${text}`, {observe: 'response' })
       );
       return response.status;
     } catch (error) {
