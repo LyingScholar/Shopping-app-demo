@@ -34,6 +34,10 @@ public class Helper extends User {
     public void addNeed(Need need) {
         fundingBasket.add(need);
     }
+    
+    public void checkout() {
+        fundingBasket.clear();
+    }
 
     @Override
     public String toString() {
