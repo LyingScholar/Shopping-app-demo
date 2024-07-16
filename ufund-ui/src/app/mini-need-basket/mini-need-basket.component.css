@@ -39,12 +39,22 @@
     border-bottom: none;
   }
   
-  .list--hidden {
+  .button--hidden {
     opacity: 0;
     visibility: hidden;
   }
   
-  .list--visible {
+  .button--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .basket--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .basket--visible {
     opacity: 1;
     visibility: visible;
   }

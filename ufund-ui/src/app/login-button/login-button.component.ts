@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LinloutService } from '../linlout.service';
 import { Router } from '@angular/router';
+import { User } from '../user';
 
 @Component({
   selector: 'app-login-button',
@@ -12,6 +13,12 @@ import { Router } from '@angular/router';
 })
 export class LoginButtonComponent {
   text: string = 'LOGIN';
+  user: User = new class {
+    name: string = '';
+    id: number = 0;
+    admin: boolean = false;
+  }
+  username: string = '';
 
   linWidth = {
     width: '65px',
@@ -24,9 +31,17 @@ export class LoginButtonComponent {
     this.linloutService.text$.subscribe(text => {
       this.text = text;
     });
+    this.linloutService.user$.subscribe(user => {
+      this.user = user;
+      this.username = user.name;
+    });
   }
 
   swapPage(): void {
-    this.router.navigate(['/login-page']);
+    if(this.text == 'LOGIN') {
+      this.router.navigate(['/login-page']);
+    } else {
+      this.linloutService.callLogout(this.username);
+    }
   }
 }

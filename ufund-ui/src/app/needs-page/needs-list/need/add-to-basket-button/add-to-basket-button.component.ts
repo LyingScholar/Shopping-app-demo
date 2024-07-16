@@ -21,17 +21,20 @@ export class AddToBasketButtonComponent {
     admin: boolean = false;
   };
   userId: number = 0;
+  username: string = '';
 
   constructor (private linloutService: LinloutService,private userService: UserService) {
     this.linloutService.user$.subscribe((user: User) => {
       this.user = user;
       this.userId = user.id;
+      this.username = user.name;
     })
   }
 
   addToBasket(): void {
     this.userService.addNeed(this.userId,this.need.id);
     window.location.reload();
+    this.linloutService.callLogout(this.username);
   }
 
 }

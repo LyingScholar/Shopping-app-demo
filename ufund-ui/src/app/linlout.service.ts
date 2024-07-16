@@ -36,4 +36,11 @@ export class LinloutService {
     this.user$ = this.userSubject.asObservable();
     return tempUser;
   }
+
+  async callLogout(text: string): Promise<void> {
+    await firstValueFrom(
+      this.http.get<any>(`${this.apiUrl}/Users/logout/?username=${text}`)
+    );
+    this.setText('LOGIN');
+  }
 }

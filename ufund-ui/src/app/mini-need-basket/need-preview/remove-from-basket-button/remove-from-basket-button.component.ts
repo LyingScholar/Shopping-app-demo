@@ -19,15 +19,18 @@ export class RemoveFromBasketButtonComponent {
     name: string = "";
     admin: boolean = false;
   };
+  username: string = '';
 
   constructor (private linloutService: LinloutService,private userService: UserService) {
     this.linloutService.user$.subscribe(user => {
       this.user = user;
+      this.username = user.name;
     })
   }
 
   removeFromBasket(): void {
     this.userService.removeNeed(this.user.id,this.need.id);
     window.location.reload()
+    this.linloutService.callLogout(this.username);
   }
 }

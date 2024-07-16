@@ -49,5 +49,12 @@ export class UserService {
     }
     return await firstValueFrom(this.http.get<Need>(`${this.URL}/Helper/fundingBasket/delete/${userId}/${needId}`));
   }
+
+  async callCheckout(userId: number): Promise<Need> {
+    if (!userId) {
+      return await firstValueFrom(of());
+    }
+    return await firstValueFrom(this.http.get<Need>(`${this.URL}/Helper/checkout/${userId}`));
+  }
 }
 

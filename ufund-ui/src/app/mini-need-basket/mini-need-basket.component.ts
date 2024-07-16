@@ -6,11 +6,12 @@ import { UserService } from '../user.service';
 import { Need } from '../needs-page/needs-list/need';
 import { User } from '../user';
 import { NeedPreviewComponent } from './need-preview/need-preview.component';
+import { CheckoutButtonComponent } from './checkout-button/checkout-button.component';
 
 @Component({
   selector: 'app-mini-need-basket',
   standalone: true,
-  imports: [CommonModule,NeedPreviewComponent],
+  imports: [CommonModule,NeedPreviewComponent,CheckoutButtonComponent],
   templateUrl: './mini-need-basket.component.html',
   styleUrl: './mini-need-basket.component.css'
 })
