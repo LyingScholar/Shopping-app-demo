@@ -1,0 +1,40 @@
+.header {
+    margin: 0px;
+    padding: 10px;
+    text-align: center;
+    background: rgb(106, 212, 177);
+    color: black;
+    font-size: 30px;
+    font-family: Verdana;
+}
+.subheader {
+    margin: 0px;
+    padding-top: 1px;
+    padding-bottom: 5px;
+    padding-right: 30px;
+    padding-left: 2px;
+    background: aquamarine;
+    color: black;
+    font-size: 12px;
+    font-family: Verdana;
+    height: 55px;
+    text-align: right;
+}
+.sidebar {
+    height: 100%;
+    width: 125px;
+    padding: 5px;
+    position: fixed;
+    z-index: 1;
+    top: 1;
+    left: 1;
+    background: rgb(116, 230, 192);
+    overflow-x: hidden;
+    padding-top: 20px; 
+    font-size: 16px;
+    font-family: Verdana;
+    text-align: left;
+}
+.needs_list {
+    margin-left: 150px;
+}

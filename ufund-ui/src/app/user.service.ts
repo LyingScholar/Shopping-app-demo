@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-//import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from './user';
+import { Need } from './needs-page/needs-list/need';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +26,13 @@ export class UserService {
       return of([]);
     }
     return this.http.get<User[]>(`${this.URL}/?name=${username}`);
+  }
+
+  viewFundingBasket(userId: number): Observable<Need[]> {
+    if (!userId) {
+      return of([]);
+    }
+    return this.http.get<Need[]>(`${this.URL}/?userId=${userId}`);
   }
 
 }
