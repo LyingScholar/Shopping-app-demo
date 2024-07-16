@@ -36,5 +36,18 @@ export class UserService {
     return await firstValueFrom(this.http.get<Need[]>(`${this.URL}/?userId=${userId}`));
   }
 
+  async addNeed(userId: number,needId: number): Promise<Need> {
+    if (!userId || !needId) {
+      return await firstValueFrom(of());
+    }
+    return await firstValueFrom(this.http.get<Need>(`${this.URL}/Helper/fundingBasket/${userId}/${needId}`));
+  }
+
+  async removeNeed(userId: number,needId: number): Promise<Need> {
+    if (!userId || !needId) {
+      return await firstValueFrom(of());
+    }
+    return await firstValueFrom(this.http.get<Need>(`${this.URL}/Helper/fundingBasket/delete/${userId}/${needId}`));
+  }
 }
 

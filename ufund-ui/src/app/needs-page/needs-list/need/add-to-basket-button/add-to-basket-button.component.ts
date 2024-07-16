@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Need } from '../../need';
-import { NeedService } from '../../../../need.service';
+import { LinloutService } from '../../../../linlout.service';
 import { UserService } from '../../../../user.service';
 
 @Component({
@@ -13,21 +13,22 @@ import { UserService } from '../../../../user.service';
 })
 export class AddToBasketButtonComponent {
 
-  private need: Need;
-  private needService: NeedService;
+  @Input() need!: Need;
+  private linloutService: LinloutService;
   private userService: UserService;
 
-  constructor (need: Need,needService: NeedService,userService: UserService) {
-    this.need = need;
-    this.needService = needService;
+  constructor (linloutService: LinloutService,userService: UserService) {
+    this.linloutService = linloutService;
     this.userService = userService;
   }
 
+  setNeed(need: Need): void {
+    this.need = need;
+  }
+
   addToBasket(): void {
-    //call function to remove need from all needs
-    //call function to add need to user's basket
-    window.location.reload()//refresh page
-    return 3; //throwing error so I don't forget to add these functions later
+    this.userService.addNeed(this.linloutService.user.id,this.need.id);
+    window.location.reload()
   }
 
 }
