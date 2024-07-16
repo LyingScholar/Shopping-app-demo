@@ -132,6 +132,7 @@ public class HelperController {
                 Need need = cupboard.getNeed(needId);
                 if (need != null) {
                     helper.addNeed(need);
+                    cupboard.removeNeed(need);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -156,6 +157,7 @@ public class HelperController {
             } else {
                 Helper helper = (Helper) user;
                 Need need = helper.getNeed(needId);
+                cupboard.addNeed(need);
                 if (need != null) {
                     helper.removeNeed(need);
                     return new ResponseEntity<>(HttpStatus.OK);

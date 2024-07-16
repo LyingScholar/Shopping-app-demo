@@ -225,4 +225,20 @@ public class Cupboard {
                 return false;
         }
     }
+
+    public void addNeed(Need need) throws IOException {
+        synchronized(needs) {
+            needs.put(need.getId(),need);
+            save();
+        }
+    }
+
+    public void removeNeed(Need need) throws IOException {
+        synchronized(needs) {
+            needs.remove(need.getId());
+            save();
+        }
+    }
+
+    
 }
