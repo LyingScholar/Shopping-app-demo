@@ -35,6 +35,18 @@ public class Helper extends User {
         fundingBasket.add(need);
     }
 
+    public void removeNeed(Need need) {
+        fundingBasket.remove(need);
+    }
+    public Need getNeed(int needId) {
+        for (Need need : fundingBasket) {
+            if (need.getId() == needId) {
+                return need;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Helper";
