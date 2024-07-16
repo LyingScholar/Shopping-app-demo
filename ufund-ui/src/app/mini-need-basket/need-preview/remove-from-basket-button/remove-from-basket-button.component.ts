@@ -4,6 +4,7 @@ import { Need } from '../../../needs-page/needs-list/need';
 import { LinloutService } from '../../../linlout.service';
 import { UserService } from '../../../user.service';
 import { User } from '../../../user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-remove-from-basket-button',
@@ -21,7 +22,7 @@ export class RemoveFromBasketButtonComponent {
   };
   username: string = '';
 
-  constructor (private linloutService: LinloutService,private userService: UserService) {
+  constructor (private router:Router, private linloutService: LinloutService,private userService: UserService) {
     this.linloutService.user$.subscribe(user => {
       this.user = user;
       this.username = user.name;
@@ -30,7 +31,8 @@ export class RemoveFromBasketButtonComponent {
 
   removeFromBasket(): void {
     this.userService.removeNeed(this.user.id,this.need.id);
-    window.location.reload()
+    //window.location.reload()
+    this.router.navigate(['/home-page']);
     this.linloutService.callLogout(this.username);
   }
 }
