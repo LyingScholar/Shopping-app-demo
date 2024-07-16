@@ -133,7 +133,7 @@ public class HelperController {
                 if (need != null) {
                     helper.addNeed(need);
                     cupboard.removeNeed(need);
-                    return new ResponseEntity<>(HttpStatus.OK);
+                    return new ResponseEntity<>(need, HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }  
