@@ -145,7 +145,7 @@ public class HelperController {
 
     @DeleteMapping("/fundingBasket/{userId}/{needId}")
     public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
-        LOG.info("PUT /Helper/" + userId + "/" + needId);
+        LOG.info("DELETE /Helper/" + userId + "/" + needId);
 
         try {
             User user = userDB.getUser(userId);
@@ -162,6 +162,27 @@ public class HelperController {
                 } else {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 } 
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/checkout/{userId}")
+    public ResponseEntity<Need> checkout(@PathVariable(required = true) int userId) {
+        LOG.info("PUT /Helper/" + userId);
+
+        try {
+            User user = userDB.getUser(userId);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else if (!(user instanceof Helper)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else {
+                Helper helper = (Helper) user;
+                helper.checkout();
+                return new ResponseEntity<>(HttpStatus.OK);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
