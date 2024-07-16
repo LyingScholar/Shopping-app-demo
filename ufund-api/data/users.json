@@ -1,1 +1,1 @@
-[{"id":1,"name":"admintest","admin":true},{"id":2,"name":"genericUser","admin":false},{"id":9,"name":"helperOne","admin":false,"fundingBasket":[]}]
+[{"id":1,"name":"admin","admin":true},{"id":2,"name":"genericUser","admin":false}]

@@ -27,7 +27,8 @@ public class UserDB {
                                         // objects and JSON text format written
                                         // to the file
     private static int nextId;  // The next Id to assign to a new user
-    private String filename;    // Filename to read from and write to
+    private String userFile;    // User Filename to read from and write to
+    private String helperFile;    // Helper Filename to read from and write to
 
     /**
      * Creates a User File Data Access Object
@@ -37,8 +38,9 @@ public class UserDB {
      * 
      * @throws IOException when file cannot be accessed or read from
      */
-    public UserDB(@Value("${users.file}") String filename,ObjectMapper objectMapper) throws IOException {
-        this.filename = filename;
+    public UserDB(@Value("${users.file}") String userFile, @Value("${helpers.file}") String helperFile, ObjectMapper objectMapper) throws IOException {
+        this.userFile = userFile;
+        this.helperFile = helperFile;
         this.objectMapper = objectMapper;
         load();  // load the users from the file
     }
@@ -86,6 +88,27 @@ public class UserDB {
         return userArray;
     }
 
+    /**
+     * Generates an array of {@linkplain Helper helpers} from the tree map for any
+     * {@linkplain Helper helpers} that contains the text specified by containsText
+     * <br>
+     * If containsText is null, the array contains all of the {@linkplain Helper helpers}
+     * in the tree map
+     * 
+     * @return  The array of {@link Helper helpers}, may be empty
+     */
+    private Helper[] getHelpersArray() { // if containsText == null, no filter
+        ArrayList<Helper> helperArrayList = new ArrayList<>();
+
+        for (Helper helper : helpers.values()) {
+            helperArrayList.add(helper);
+        }
+
+        Helper[] helperArray = new Helper[helperArrayList.size()];
+        helperArrayList.toArray(helperArray);
+        return helperArray;
+    }
+
     public int login(String username) {
         // User doesn't exist
         if (checkForAUser(username) == false) {
@@ -129,11 +152,13 @@ public class UserDB {
      */
     private boolean save() throws IOException {
         User[] userArray = getUsersArray();
+        Helper[] helperArray = getHelpersArray();
 
         // Serializes the Java Objects to JSON objects into the file
         // writeValue will thrown an IOException if there is an issue
         // with the file or reading from the file
-        objectMapper.writeValue(new File(filename),userArray);
+        objectMapper.writeValue(new File(userFile),userArray);
+        objectMapper.writeValue(new File(helperFile),helperArray);
         return true;
     }
 
@@ -155,13 +180,24 @@ public class UserDB {
         // Deserializes the JSON objects from the file into an array of users
         // readValue will throw an IOException if there's an issue with the file
         // or reading from the file
-        User[] userArray = objectMapper.readValue(new File(filename),User[].class);
+        User[] userArray = objectMapper.readValue(new File(userFile),User[].class);
 
         // Add each user to the tree map and keep track of the greatest id
         for (User user : userArray) {
             users.put(user.getId(),user);
             if (user.getId() > nextId)
                 nextId = user.getId();
+        }
+
+
+        Helper[] helperArray = objectMapper.readValue(new File(helperFile),Helper[].class);
+
+        // Add each user to the tree map and keep track of the greatest id
+        for (Helper helper : helperArray) {
+            users.put(helper.getId(),helper);
+            helpers.put(helper.getId(),helper);
+            if (helper.getId() > nextId)
+                nextId = helper.getId();
         }
         // Make the next id one greater than the maximum from the file
         ++nextId;
