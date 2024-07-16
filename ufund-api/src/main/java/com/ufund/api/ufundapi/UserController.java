@@ -169,7 +169,8 @@ public class UserController {
             } else if(status == 2) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             } else {
-                return new ResponseEntity<>(HttpStatus.OK);
+                User user = UserDB.getUserByName(username);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
@@ -197,7 +198,8 @@ public class UserController {
             } else if(status == 2) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             } else {
-                return new ResponseEntity<>(HttpStatus.OK);
+                User user = UserDB.getUserByName(username);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());

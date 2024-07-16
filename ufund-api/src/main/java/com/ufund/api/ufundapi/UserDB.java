@@ -123,7 +123,7 @@ public class UserDB {
             return 3;
         }
     }
-
+    
     public int logout(String username) {
         // User doesn't exist
         if (checkForAUser(username) == false) {
