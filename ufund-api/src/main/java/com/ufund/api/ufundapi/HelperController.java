@@ -132,10 +132,59 @@ public class HelperController {
                 Need need = cupboard.getNeed(needId);
                 if (need != null) {
                     helper.addNeed(need);
-                    return new ResponseEntity<>(HttpStatus.OK);
+                    cupboard.removeNeed(need);
+                    return new ResponseEntity<>(need, HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }  
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/fundingBasket/delete/{userId}/{needId}")
+    public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
+        LOG.info("DELETE /Helper/" + userId + "/" + needId);
+
+        try {
+            User user = userDB.getUser(userId);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else if (!(user instanceof Helper)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else {
+                Helper helper = (Helper) user;
+                Need need = helper.getNeed(needId);
+                cupboard.addNeed(need);
+                if (need != null) {
+                    helper.removeNeed(need);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                } 
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/checkout/{userId}")
+    public ResponseEntity<Need> checkout(@PathVariable(required = true) int userId) {
+        LOG.info("PUT /Helper/" + userId);
+
+        try {
+            User user = userDB.getUser(userId);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else if (!(user instanceof Helper)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else {
+                Helper helper = (Helper) user;
+                helper.checkout();
+                return new ResponseEntity<>(HttpStatus.OK);
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
