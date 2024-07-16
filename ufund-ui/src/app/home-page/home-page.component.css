@@ -1,25 +1,13 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Verdana, sans-serif;
-    background: linear-gradient(-45deg, #ffffff, #e6e6fa, #d8bfd8, #dda0dd);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-  }
-  
-  @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
+
   .header {
     margin: 0px;
     padding: 10px;
     text-align: center;
     background: rgba(106, 212, 177, 0.9);
     color: black;
+    font-family: Helvetica;
     font-size: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
   
   .header h1 {
@@ -34,6 +22,7 @@ body {
     padding-left: 2px;
     background: rgba(127, 255, 212, 0.9);
     color: black;
+    font-family: Verdana, serif;
     font-size: 12px;
     height: 55px;
     text-align: right;
@@ -68,6 +57,7 @@ body {
     background: rgba(116, 230, 192, 0.9);
     overflow-x: hidden;
     padding-top: 20px;
+    font-family: Verdana, serif;
     font-size: 16px;
     text-align: left;
   }
