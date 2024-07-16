@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 import { Observable, of } from 'rxjs';
 
@@ -21,18 +22,18 @@ export class UserService {
     private http: HttpClient,
   ) {}
 
-  searchUsers(username: string): Observable<User[]> {
+  async searchUsers(username: string): Promise<User[]> {
     if (!username.trim()) {
-      return of([]);
+      return await firstValueFrom(of([]));
     }
-    return this.http.get<User[]>(`${this.URL}/?name=${username}`);
+    return await firstValueFrom(this.http.get<User[]>(`${this.URL}/?name=${username}`));
   }
 
-  viewFundingBasket(userId: number): Observable<Need[]> {
+  async viewFundingBasket(userId: number): Promise<Need[]> {
     if (!userId) {
-      return of([]);
+      return await firstValueFrom(of([]));
     }
-    return this.http.get<Need[]>(`${this.URL}/?userId=${userId}`);
+    return await firstValueFrom(this.http.get<Need[]>(`${this.URL}/?userId=${userId}`));
   }
 
 }
