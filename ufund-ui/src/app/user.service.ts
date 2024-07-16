@@ -12,7 +12,7 @@ import { Need } from './needs-page/needs-list/need';
 })
 export class UserService {
 
-  private URL = 'http://localhost:8080/heroes';
+  private URL = 'http://localhost:8080';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -33,7 +33,7 @@ export class UserService {
     if (!userId) {
       return await firstValueFrom(of([]));
     }
-    return await firstValueFrom(this.http.get<Need[]>(`${this.URL}/?userId=${userId}`));
+    return await firstValueFrom(this.http.get<Need[]>(`${this.URL}/Helper/fundingBasket/?userId=${userId}`));
   }
 
   async addNeed(userId: number,needId: number): Promise<Need> {
