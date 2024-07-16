@@ -1,8 +1,56 @@
-.lin-class {
-    display: none;
+.title {
+    margin-bottom: 20px;
+  }
+  
+  .title h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .list {
+    background: linear-gradient(-45deg, #ffffff, #e6e6fa, #d8bfd8, #dda0dd);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .list h3 {
+    font-size: 18px;
+    color: #444;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  
+  .need-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .need-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .need-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .list--hidden {
+    opacity: 0;
     visibility: hidden;
-}
-.lout-class {
-    display: block;
+  }
+  
+  .list--visible {
+    opacity: 1;
     visibility: visible;
-}
+  }
+  
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
