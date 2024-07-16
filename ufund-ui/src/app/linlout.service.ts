@@ -27,16 +27,15 @@ export class LinloutService {
     this.textSubject.next(newText);
   }
 
-  async callLogin(text: string): Promise<number> {
+  async callLogin(text: string): Promise<User> {
     try {
-      const response: HttpResponse<any> = await firstValueFrom(
-        this.http.get<any>(`${this.apiUrl}/Users/login/?username=${text}`, {observe: 'response' })
+      this.user =  await firstValueFrom(
+        this.http.get<User>(`${this.apiUrl}/Users/login/?username=${text}`)
       );
-      this.user = await firstValueFrom(this.http.get<User>(`${this.apiUrl}/Users/login/?username=${text}`));
-      return response.status;
+      return this.user;
     } catch (error) {
       console.error('Error', error);
-      return 500;
+      throw new Error("Internal Error");
     }
   }
 }

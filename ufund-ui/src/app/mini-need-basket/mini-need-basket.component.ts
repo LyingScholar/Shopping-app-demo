@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LinloutService } from '../../linlout.service';
+import { LinloutService } from '../linlout.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
