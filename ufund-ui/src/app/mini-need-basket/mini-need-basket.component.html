@@ -1,14 +1,9 @@
 <div class="title">
     <h2>{{ title }}</h2>
   </div>
-  
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   <div class="list" [ngClass]="{'list--hidden': !loggedIn, 'list--visible': loggedIn}">
-    <h3>Your Basket</h3>
-    <ul class="need-list">
-      <!-- Placeholder for the list of needs, should link this later -->
-      <li>Need item 1</li>
-      <li>Need item 2</li>
-      <li>Need item 3</li>
-    </ul>
-    <!-- Will make list of the needs when we get there -->
+    <div *ngFor="let need of needs">
+      <app-need-preview [need]="need"></app-need-preview>
+    </div>
   </div>

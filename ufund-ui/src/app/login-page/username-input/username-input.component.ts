@@ -38,10 +38,12 @@ export class UsernameInputComponent implements OnDestroy {
 
   async loginWithJava(username: string): Promise<void> {
     this.errorMessage = '';
-    await this.linlout.callLogin(username).catch(error => {
-      this.errorMessage = 'Login failed. Error: ' + error;
+    try {
+      await this.linlout.callLogin(username);
+    } catch (error) {
+      this.errorMessage = "Error: " + error;
       return;
-    });
+    }
     this.linlout.setText('LOGOUT');
     this.router.navigate(['/home-page']);
   }
