@@ -122,15 +122,19 @@ public class Cupboard {
         // or reading from the file
         Need[] needArray = objectMapper.readValue(new File(filename),Need[].class);
 
-        // Add each need to the tree map and keep track of the greatest id
-        for (Need need : needArray) {
-            needs.put(need.getId(),need);
-            if (need.getId() > nextId)
-                nextId = need.getId();
+        if (needArray != null) {
+            // Add each need to the tree map and keep track of the greatest id
+            for (Need need : needArray) {
+                needs.put(need.getId(),need);
+                if (need.getId() > nextId)
+                    nextId = need.getId();
+            }
+            // Make the next id one greater than the maximum from the file
+            ++nextId;
+            return true;
+        } else {
+            return false;
         }
-        // Make the next id one greater than the maximum from the file
-        ++nextId;
-        return true;
     }
 
     /**
