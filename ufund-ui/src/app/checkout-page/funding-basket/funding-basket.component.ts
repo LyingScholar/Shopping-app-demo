@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Need } from '../../needs-page/needs-list/need';
 import { UserService } from '../../user.service';
-import { NeedComponent } from '../../needs-page/needs-list/need/need.component';
+import { NeedComponent } from './need/need.component';
 import { CommonModule } from '@angular/common';
 import { LinloutService } from '../../linlout.service';
 import { User } from '../../user';

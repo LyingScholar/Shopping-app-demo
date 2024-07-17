@@ -36,7 +36,7 @@ export class AddToBasketButtonComponent {
     this.userService.addNeed(this.userId,this.need.id);
     //window.location.reload()
     this.router.navigate(['/home-page']);
-    this.linloutService.callLogout(this.username);
+    //this.linloutService.callLogout(this.username);
   }
 
 }
