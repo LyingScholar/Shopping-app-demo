@@ -16,6 +16,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    font-size: 12px;
   }
   
   .list h3 {
