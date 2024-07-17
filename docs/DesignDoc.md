@@ -25,6 +25,7 @@ their needs.
 ### Purpose
 >  _**[Sprint 2 & 4]** Provide a very brief statement about the project and the most
 > important user group and user goals._
+The purpose of this project is to create a application that introduces a Need management service for companies, such that an admin can given helpers a list of needs to be completed and the helpers can take the needs, complete them, and checkout to signify fcompleting thier needs.
 
 ### Glossary and Acronyms
 > _**[Sprint 2 & 4]** Provide a table of terms and acronyms._
@@ -156,6 +157,7 @@ UserDB: Is the User Data Persistence holding a list of users in the U-Fund serve
 > _**[Sprint 2, 3 & 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
+
 The model tier, consisting of the Need class and User class, creates the foundation for the Need and User features that have the functionality to be used for other tiers.
 
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
@@ -166,13 +168,16 @@ The model tier, consisting of the Need class and User class, creates the foundat
 ## OO Design Principles
 
 > _**[Sprint 1]** Name and describe the initial OO Principles that your team has considered in support of your design (and implementation) for this first Sprint._
+
 We used the Information Expert principle to make sure we each class has it's responsibility and no others, making the controllers easier to make. 
-We also used the Controller principle to connect the model to the application seemlessly.
+
 > 
 
 > _**[Sprint 2, 3 & 4]** Will eventually address upto **4 key OO Principles** in your final design. Follow guidance in augmenting those completed in previous Sprints as indicated to you by instructor. Be sure to include any diagrams (or clearly refer to ones elsewhere in your Tier sections above) to support your claims._
 
 > _**[Sprint 3 & 4]** OO Design Principles should span across **all tiers.**_
+
+We also used the Controller principle to connect the model to the application seemlessly. The Controller acts as the middle class that takes information from the different models it needs and returns information to the UI, such that the UI is able to express correctly what happened in the backend, whether the action performed correctly or with errors.
 
 ## Static Code Analysis/Future Design Improvements
 > _**[Sprint 4]** With the results from the Static Code Analysis exercise, 
@@ -192,8 +197,11 @@ We also used the Controller principle to connect the model to the application se
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
+
 As of Sprint 2, all user stories have passed all their acceptance criteria tests and none are having errors.
+
 Issues found during acceptance testing: The user search functionality is case-sensitive, which was not specified in the initial requirements.
+
 Concern: The case sensitivity issue needs to be addressed before the final release.
 
 ### Unit Testing and Code Coverage
@@ -204,12 +212,23 @@ Concern: The case sensitivity issue needs to be addressed before the final relea
 
 >_**[Sprint 2, 3 & 4]** **Include images of your code coverage report.** If there are any anomalies, discuss
 > those._
+
 Our unit testing strategy focused on comprehensive coverage of all the methods, including edge cases and concurrency scenarios. We aimed high (90%) to ensure robustness and reliability in this core functionality.
+
 We achieved 100% code coverage for the Need, Need Controller User and UserController classes, exceeding our target. Even on the remaining files out coverage was >97%. This high coverage ensures that most scenarios, including error cases and edge conditions, are tested.
+
 However, we noted that some complex concurrency scenarios were challenging to test comprehensively, which is an area for future improvement.
+
 Anomaly: While overall coverage is high, we noticed that some exception handling code paths were not fully exercised. In future iterations, we plan to introduce more fault injection tests to cover these scenarios.
+
 ![Domain Model](sprint-2-code-coverage.png)
 
 
 ## Ongoing Rationale
 >_**[Sprint 1, 2, 3 & 4]** Throughout the project, provide a time stamp **(yyyy/mm/dd): Sprint # and description** of any _**mayor**_ team decisions or design milestones/changes and corresponding justification._
+
+**(2024/07/11): Sprint 3**
+As a team, we decided we needed to add a Helper class and Helper Controller to implement the Helper functionality. We decided we were going to extend the User class to adhere to Object Oriented Design principles and to make it easier to implement the Helper class.
+
+**(2024/07/15): Sprint 3**
+We were able to come up with a design for the UI and implement it such that the UI flow is working without any of the specific user functionality. We are going to create a Needs page, homepage, and login page, where the functinality on each will be showing or hidden depending on the user login. The login page will determine whether the user is an admin (username is "admin") or a Helper (any other username). 
