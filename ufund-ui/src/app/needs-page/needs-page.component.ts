@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { LoginButtonComponent } from '../home-page/login-button/login-button.component';
-import { MiniNeedBasketComponent } from '../home-page/mini-need-basket/mini-need-basket.component';
+import { LoginButtonComponent } from '../login-button/login-button.component';
+import { MiniNeedBasketComponent } from '../mini-need-basket/mini-need-basket.component';
 import { NeedsListComponent } from './needs-list/needs-list.component';
 
 @Component({

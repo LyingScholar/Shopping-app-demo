@@ -19,6 +19,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    font-size: 12px;
   }
   
   .list h3 {
@@ -42,7 +43,7 @@
     border-bottom: none;
   }
   
-  .list--hidden {
+  .button--hidden {
     opacity: 0;
     visibility: hidden;
 }
@@ -50,7 +51,17 @@
     display: block;
 }
   
-  .list--visible {
+  .button--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .basket--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .basket--visible {
     opacity: 1;
     visibility: visible;
   }

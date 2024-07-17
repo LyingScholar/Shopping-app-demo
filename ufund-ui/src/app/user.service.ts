@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 import { Observable, of } from 'rxjs';
 
@@ -11,7 +12,7 @@ import { Need } from './needs-page/needs-list/need';
 })
 export class UserService {
 
-  private URL = 'http://localhost:8080/heroes';
+  private URL = 'http://localhost:8080';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,19 +22,39 @@ export class UserService {
     private http: HttpClient,
   ) {}
 
-  searchUsers(username: string): Observable<User[]> {
+  async searchUsers(username: string): Promise<User[]> {
     if (!username.trim()) {
-      return of([]);
+      return await firstValueFrom(of([]));
     }
-    return this.http.get<User[]>(`${this.URL}/?name=${username}`);
+    return await firstValueFrom(this.http.get<User[]>(`${this.URL}/?name=${username}`));
   }
 
-  viewFundingBasket(userId: number): Observable<Need[]> {
+  async viewFundingBasket(userId: number): Promise<Need[]> {
     if (!userId) {
-      return of([]);
+      return await firstValueFrom(of([]));
     }
-    return this.http.get<Need[]>(`${this.URL}/?userId=${userId}`);
+    return await firstValueFrom(this.http.get<Need[]>(`${this.URL}/Helper/fundingBasket/?userId=${userId}`));
   }
 
+  async addNeed(userId: number,needId: number): Promise<void> {
+    if (!userId || !needId) {
+      return await firstValueFrom(of());
+    }
+    await firstValueFrom(this.http.put<Need>(`${this.URL}/Helper/fundingBasket/${userId}/${needId}`,{observe: "need"}));
+  }
+
+  async removeNeed(userId: number,needId: number): Promise<void> {
+    if (!userId || !needId) {
+      return await firstValueFrom(of());
+    }
+    await firstValueFrom(this.http.put<Need>(`${this.URL}/Helper/fundingBasket/delete/${userId}/${needId}`,{observe: "need"}));
+  }
+
+  async callCheckout(userId: number): Promise<Need> {
+    if (!userId) {
+      return await firstValueFrom(of());
+    }
+    return await firstValueFrom(this.http.get<Need>(`${this.URL}/Helper/checkout/${userId}`));
+  }
 }
 

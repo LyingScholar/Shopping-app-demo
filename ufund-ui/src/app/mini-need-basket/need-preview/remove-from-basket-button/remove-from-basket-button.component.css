@@ -1,4 +1,4 @@
-.add_to_basket {
+.remove_from_basket {
     padding: 2px;
     height: 28px;
     z-index: 1;
@@ -14,6 +14,6 @@
     border: none;
     border-radius: 5px;
 }
-.add_to_basket:hover {
+.remove_from_basket:hover {
     background: rgb(79, 167, 139);
 }

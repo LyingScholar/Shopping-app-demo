@@ -1,0 +1,12 @@
+<div class="title">
+    <h2>{{ title }}</h2>
+</div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+<div class="basket" [ngClass]="{'basket--hidden': !loggedIn, 'basket--visible': loggedIn}">
+    <div class="list" *ngFor="let need of needs">
+      <app-need-preview [need]="need"></app-need-preview>
+    </div>
+  <div class="button" [ngClass]="{'button--hidden': !(needs.length > 0), 'button--visible': (needs.length > 0)}">
+    <app-checkout-button></app-checkout-button>
+  </div>
+</div>

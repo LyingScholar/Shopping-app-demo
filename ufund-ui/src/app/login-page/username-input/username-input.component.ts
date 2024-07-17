@@ -38,18 +38,14 @@ export class UsernameInputComponent implements OnDestroy {
 
   async loginWithJava(username: string): Promise<void> {
     this.errorMessage = '';
-    var response: number = 0;
-    await this.linlout.callLogin(username).then(status => {
-      response = status;
-    }).catch(error => {
-      response = 500;
-    });
-    if (response == 200) {
-      this.linlout.setText('LOGOUT');
-      this.router.navigate(['/home-page']);
-    } else {
-      this.errorMessage = 'Login failed. Please try again. Error: ' + response;
+    try {
+      await this.linlout.callLogin(username);
+    } catch (error) {
+      this.errorMessage = "Error: " + error;
+      return;
     }
+    this.linlout.setText('LOGOUT');
+    this.router.navigate(['/home-page']);
   }
   
   ngOnDestroy(): void {
