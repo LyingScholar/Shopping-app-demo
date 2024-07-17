@@ -144,7 +144,7 @@ public class HelperController {
         }
     }
 
-    @DeleteMapping("/fundingBasket/delete/{userId}/{needId}")
+    @DeleteMapping("fundingBasket/delete/{userId}/{needId}")
     public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
         LOG.info("DELETE /Helper/" + userId + "/" + needId);
 
