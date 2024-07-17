@@ -263,7 +263,7 @@ public class UserController {
      * @param User The {@link User User} to update
      * 
      * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
-     * ResponseEntity with HTTP status of UNAUTHORIZED if user doesn't exist<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if user doesn't exist<br>
      */
     @GetMapping("/check")
     public ResponseEntity<User> adminCheck(@RequestParam(required=false) String username) {
