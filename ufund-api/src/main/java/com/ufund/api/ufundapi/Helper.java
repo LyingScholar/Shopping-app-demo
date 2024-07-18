@@ -10,7 +10,7 @@ public class Helper extends User {
     private static final Logger LOG = Logger.getLogger(Helper.class.getName());
 
     @JsonProperty("fundingBasket") 
-    private ArrayList<Need> fundingBasket;
+    private final ArrayList<Need> fundingBasket;
 
     /**
      * Create a Helper with the given id, name, and admin status.
@@ -26,7 +26,7 @@ public class Helper extends User {
                   @JsonProperty("name") String name, 
                   @JsonProperty("admin") boolean admin) {
         super(id, name, admin);
-        this.fundingBasket = new ArrayList<Need>();
+        this.fundingBasket = new ArrayList<>();
     }
 
     /**

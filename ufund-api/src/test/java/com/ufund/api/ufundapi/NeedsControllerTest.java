@@ -254,7 +254,7 @@ public class NeedsControllerTest {
     @Test
     void testDeleteNeed_ThrowsError() throws IOException{
         int id = 3;
-        when(cupboard.deleteNeed(id)).thenThrow(new RuntimeException("Test exception"));
+        when(cupboard.deleteNeed(id)).thenThrow(new IOException("Test exception"));
 
         ResponseEntity<Need> response = needController.deleteNeed(id);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

@@ -4,12 +4,18 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
@@ -264,4 +270,142 @@ class UserControllerTest {
         ResponseEntity<User> response = userController.deleteUser(3);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    void testLogoutSuccess() throws Exception {
+        User testUser = new User(1, "Test User", false);
+        String username = "testUser";
+        when(userDB.logout(username)).thenReturn(0);
+        when(userDB.getUserByName(username)).thenReturn(testUser);
+
+        ResponseEntity<User> response = userController.logout(username);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Test User", response.getBody().getName());
+        verify(userDB, times(1)).logout(username);
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testLogoutUnauthorized() throws Exception {
+        String username = "unauthorizedUser";
+        when(userDB.logout(username)).thenReturn(1);
+
+        ResponseEntity<User> response = userController.logout(username);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).logout(username);
+        verify(userDB, never()).getUserByName(anyString());
+    }
+
+    @Test
+    void testLogoutConflict() throws Exception {
+
+        String username = "conflictUser";
+        when(userDB.logout(username)).thenReturn(2);
+
+        ResponseEntity<User> response = userController.logout(username);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).logout(username);
+        verify(userDB, never()).getUserByName(anyString());
+    }
+
+    @Test
+    void testLogout_WithNullUsername() throws Exception {
+        when(userDB.logout(null)).thenReturn(0);
+        when(userDB.getUserByName(null)).thenReturn(null);
+
+        ResponseEntity<User> response = userController.logout(null);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).logout(null);
+        verify(userDB, times(1)).getUserByName(null);
+    }
+
+    @Test
+    void testLogout_ThrowsError() throws Exception {
+        String username = "exceptionUser";
+        when(userDB.logout(username)).thenThrow(new RuntimeException("Test exception"));
+
+        ResponseEntity<User> response = userController.logout(username);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).logout(username);
+        verify(userDB, never()).getUserByName(anyString());
+    }
+
+
+
+    @Test
+    void testAdmin_true() throws Exception {
+        String username = "Admin User";
+        User testUser = new User(1, "Admin User", true);
+        when(userDB.getUserByName(username)).thenReturn(testUser);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(username, response.getBody().getName());
+        assertTrue(response.getBody().isAdmin());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheck_false() throws Exception {
+        String username = "regular User";
+        User testUser = new User(1, "regular User", false);
+
+        when(userDB.getUserByName(username)).thenReturn(testUser);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(username, response.getBody().getName());
+        assertFalse(response.getBody().isAdmin());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheckWithNonExistentUser() throws Exception {
+        String username = "nonExistentUser";
+        when(userDB.getUserByName(username)).thenReturn(null);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheckWithNullUsername() throws Exception {
+        when(userDB.getUserByName(null)).thenReturn(null);
+
+        ResponseEntity<User> response = userController.adminCheck(null);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(null);
+    }
+
+    @Test
+    void testAdminCheckWithException() throws Exception {
+        String username = "exceptionUser";
+        when(userDB.getUserByName(username)).thenThrow(new RuntimeException("Test exception"));
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
 }
