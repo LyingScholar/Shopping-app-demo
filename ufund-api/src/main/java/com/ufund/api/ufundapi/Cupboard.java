@@ -297,10 +297,5 @@ public class Cupboard {
                 return false;
             }
         }
-<<<<<<< HEAD
     }    
 }
-=======
-    }
-}
->>>>>>> d32456e02c35e1368b756fece41dccad1b4582c8
