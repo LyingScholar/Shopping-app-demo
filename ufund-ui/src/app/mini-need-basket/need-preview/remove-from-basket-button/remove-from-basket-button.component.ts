@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Need } from '../../../needs-page/needs-list/need';
-import { LinloutService } from '../../../linlout.service';
-import { UserService } from '../../../user.service';
+import { Need } from '../../../need';
+import { LinloutService } from '../../../services/linlout.service';
+import { UserService } from '../../../services/user.service';
 import { User } from '../../../user';
 import { Router } from '@angular/router';
 

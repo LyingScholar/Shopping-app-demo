@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Need } from '../../needs-page/needs-list/need';
+import { Need } from '../../need';
 import { RemoveFromBasketButtonComponent } from './remove-from-basket-button/remove-from-basket-button.component';
 
 @Component({

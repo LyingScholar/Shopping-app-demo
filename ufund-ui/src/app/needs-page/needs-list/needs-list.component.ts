@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Need } from './need';
-import { NeedService } from '../../need.service';
+import { Need } from '../../need';
+import { NeedService } from '../../services/need.service';
 import { NeedComponent } from './need/need.component';
 import { CommonModule } from '@angular/common';
 

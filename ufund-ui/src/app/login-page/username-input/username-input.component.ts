@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, takeUntil } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LinloutService } from '../../linlout.service';
+import { LinloutService } from '../../services/linlout.service';
 import { HttpResponse } from '@angular/common/http';
 
 

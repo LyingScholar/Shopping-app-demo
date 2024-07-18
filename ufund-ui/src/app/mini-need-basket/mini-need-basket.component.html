@@ -1,8 +1,8 @@
 <div class="title">
     <h2>{{ title }}</h2>
 </div>
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-<div class="basket" [ngClass]="{'basket--hidden': !loggedIn, 'basket--visible': loggedIn}">
+<div *ngIf="errorMessage && loggedIn && !admin" class="error-message">{{ errorMessage }}</div>
+<div class="basket" [ngClass]="{'basket--hidden': !loggedIn || admin, 'basket--visible': loggedIn || !admin}">
     <div class="list" *ngFor="let need of needs">
       <app-need-preview [need]="need"></app-need-preview>
     </div>

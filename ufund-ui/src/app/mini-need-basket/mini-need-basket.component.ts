@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { LinloutService } from '../linlout.service';
+import { LinloutService } from '../services/linlout.service';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../user.service';
-import { Need } from '../needs-page/needs-list/need';
+import { UserService } from '../services/user.service';
+import { Need } from '../need';
 import { User } from '../user';
 import { NeedPreviewComponent } from './need-preview/need-preview.component';
 import { CheckoutButtonComponent } from './checkout-button/checkout-button.component';
@@ -26,6 +26,7 @@ export class MiniNeedBasketComponent implements OnInit {
     admin: boolean = false;
   };
   userId: number = 0;
+  admin: boolean = false;
 
   constructor(private linloutService: LinloutService,private userService: UserService) {
     this.linloutService.text$.subscribe(text => {
@@ -40,6 +41,9 @@ export class MiniNeedBasketComponent implements OnInit {
     this.linloutService.user$.subscribe((user: User) => {
       this.user = user;
       this.userId = user.id;
+    })
+    this.linloutService.admin$.subscribe((admin: boolean) => {
+      this.admin = admin;
     })
   }
 

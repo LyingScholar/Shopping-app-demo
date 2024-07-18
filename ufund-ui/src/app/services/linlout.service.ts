@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { User } from './user';
+import { User } from '../user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,9 @@ import { User } from './user';
 export class LinloutService {
   private textSubject: BehaviorSubject<string> = new BehaviorSubject<string>('LOGIN');
   text$: Observable<string> = this.textSubject.asObservable();
+
+  private adminSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  admin$: Observable<boolean> = this.adminSubject.asObservable();
 
 
   private apiUrl = 'http://localhost:8080';
@@ -21,7 +25,7 @@ export class LinloutService {
   });
   user$: Observable<User> = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private router: Router) { }
   
   setText(newText: string): void {
     this.textSubject.next(newText);
@@ -34,6 +38,8 @@ export class LinloutService {
     );
     this.userSubject = new BehaviorSubject<User>(tempUser);
     this.user$ = this.userSubject.asObservable();
+    this.adminSubject = new BehaviorSubject<boolean>(tempUser.admin);
+    this.admin$ = this.adminSubject.asObservable();
     return tempUser;
   }
 
@@ -42,5 +48,8 @@ export class LinloutService {
       this.http.get<any>(`${this.apiUrl}/Users/logout/?username=${text}`)
     );
     this.setText('LOGIN');
+    this.adminSubject = new BehaviorSubject<boolean>(false);
+    this.admin$ = this.adminSubject.asObservable();
+    this.router.navigate(['/home-page']);
   }
 }

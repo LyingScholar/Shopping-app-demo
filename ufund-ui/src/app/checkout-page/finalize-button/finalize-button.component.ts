@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../../user';
-import { LinloutService } from '../../linlout.service';
-import { UserService } from '../../user.service';
+import { LinloutService } from '../../services/linlout.service';
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 
 @Component({

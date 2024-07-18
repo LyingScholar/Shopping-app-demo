@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Need } from '../../../needs-page/needs-list/need';
+import { Need } from '../../../need';
 
 @Component({
   selector: 'app-need',

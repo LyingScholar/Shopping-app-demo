@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LinloutService } from '../linlout.service';
+import { LinloutService } from '../services/linlout.service';
 import { Router } from '@angular/router';
 import { User } from '../user';
 
