@@ -14,14 +14,12 @@ import { Router } from '@angular/router';
 })
 export class AddNeedPageComponent {
   title = 'U-Fund Edit Needs Page'
-  needId: number;
   needName: string = '';
   needType: string = '';
   needCost: number = 0;
   needQuantity: number = 0;
 
   constructor (private needService: NeedService,private router:Router) {
-    this.needId = needService.getEdit();
   }
 
   async confirmNeed(): Promise<void> {
@@ -29,8 +27,7 @@ export class AddNeedPageComponent {
     var type = this.needType;
     var quantity = this.needQuantity;
     var cost = this.needCost;
-    var id = this.needId;
-    if (name == '' || type == '' || quantity < 1 || cost < 1 || id < 1) {
+    if (name == '' || type == '' || quantity < 1 || cost < 1) {
       return;
     }
     var need: Need = new class {
@@ -38,7 +35,7 @@ export class AddNeedPageComponent {
       type: string = type;
       quantity: number = quantity;
       cost: number = cost;
-      id:number = id;
+      id:number = 0;
     }
     await this.needService.makeNeed(need);
     this.router.navigate(['/home-page']);

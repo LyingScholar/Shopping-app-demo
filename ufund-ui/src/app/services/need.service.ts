@@ -25,11 +25,6 @@ export class NeedService {
     return this.editing;
   }
 
-  async getNextId (): Promise<number> {
-    var tempNeeds: Need[] = await this.callGetNeeds();
-    return tempNeeds[tempNeeds.length-1].id+1;
-  }
-
   async callGetNeeds(): Promise<Need[]> {
     try {
       const needs: Need[] = await firstValueFrom(
@@ -56,10 +51,10 @@ export class NeedService {
   }
 
   async makeNeed(need: Need): Promise<void> {
-    await firstValueFrom(this.http.post<void>(`${this.apiUrl}/Needs${need}`,{observable: "response"}));
+    await firstValueFrom(this.http.post<void>(`${this.apiUrl}/Needs?name=${need.name}&type=${need.type}&quantity=${need.quantity}$cost=${need.cost}`,{observable: "response"}));
   }
 
   async editNeed(need: Need): Promise<void> {
-    await firstValueFrom(this.http.put<void>(`${this.apiUrl}/Needs${need}`,{observable: "response"}));
+    await firstValueFrom(this.http.put<void>(`${this.apiUrl}/Needs?id=${need.id}&name=${need.name}&type=${need.type}&quantity=${need.quantity}$cost=${need.cost}`,{observable: "response"}));
   }
 }
