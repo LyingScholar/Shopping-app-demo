@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -336,6 +338,74 @@ class UserControllerTest {
         assertNull(response.getBody());
         verify(userDB, times(1)).logout(username);
         verify(userDB, never()).getUserByName(anyString());
+    }
+
+
+
+    @Test
+    void testAdmin_true() throws Exception {
+        String username = "Admin User";
+        User testUser = new User(1, "Admin User", true);
+        when(userDB.getUserByName(username)).thenReturn(testUser);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(username, response.getBody().getName());
+        assertTrue(response.getBody().isAdmin());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheck_false() throws Exception {
+        String username = "regular User";
+        User testUser = new User(1, "regular User", false);
+
+        when(userDB.getUserByName(username)).thenReturn(testUser);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(username, response.getBody().getName());
+        assertFalse(response.getBody().isAdmin());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheckWithNonExistentUser() throws Exception {
+        String username = "nonExistentUser";
+        when(userDB.getUserByName(username)).thenReturn(null);
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(username);
+    }
+
+    @Test
+    void testAdminCheckWithNullUsername() throws Exception {
+        when(userDB.getUserByName(null)).thenReturn(null);
+
+        ResponseEntity<User> response = userController.adminCheck(null);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(null);
+    }
+
+    @Test
+    void testAdminCheckWithException() throws Exception {
+        String username = "exceptionUser";
+        when(userDB.getUserByName(username)).thenThrow(new RuntimeException("Test exception"));
+
+        ResponseEntity<User> response = userController.adminCheck(username);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(userDB, times(1)).getUserByName(username);
     }
 
 }
