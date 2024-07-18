@@ -162,11 +162,13 @@ public class NeedController {
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @PutMapping("")
-    public ResponseEntity<Need> updateNeed(@RequestBody Need Need) {
-        LOG.info("PUT /Needs " + Need);
+    public ResponseEntity<Need> updateNeed(@RequestParam() String id, @RequestParam() String name, @RequestParam() String type, 
+                                            @RequestParam() int quantity, @RequestParam() int cost) {
+        LOG.info("PUT /Needs/" + id + "/" + name + "/" + quantity + "/" + cost + "/" + type);
 
         try {
-            Need updatedNeed = Cupboard.updateNeed(Need);
+            Need inputNeed = new Need(1, name, quantity, cost, type);
+            Need updatedNeed = Cupboard.updateNeed(inputNeed);
             if (updatedNeed == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
