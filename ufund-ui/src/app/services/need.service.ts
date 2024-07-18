@@ -13,7 +13,22 @@ export class NeedService {
   searchSubject: BehaviorSubject<Need[]> = new BehaviorSubject<Need[]>([]);
   search$: Observable<Need[]> = this.searchSubject.asObservable();
 
+  editing: number = 0;
+
   constructor(private http: HttpClient) { }
+
+  public setEdit (id: number): void {
+    this.editing = id;
+  }
+
+  public getEdit (): number {
+    return this.editing;
+  }
+
+  async getNextId (): Promise<number> {
+    var tempNeeds: Need[] = await this.callGetNeeds();
+    return tempNeeds[tempNeeds.length-1].id+1;
+  }
 
   async callGetNeeds(): Promise<Need[]> {
     try {
@@ -38,5 +53,13 @@ export class NeedService {
     var need: Need = await firstValueFrom(
       this.http.delete<Need>(`${this.apiUrl}/Needs/${id}`));
       return need;
+  }
+
+  async makeNeed(need: Need): Promise<void> {
+    await firstValueFrom(this.http.post<void>(`${this.apiUrl}/Needs${need}`,{observable: "response"}));
+  }
+
+  async editNeed(need: Need): Promise<void> {
+    await firstValueFrom(this.http.put<void>(`${this.apiUrl}/Needs${need}`,{observable: "response"}));
   }
 }

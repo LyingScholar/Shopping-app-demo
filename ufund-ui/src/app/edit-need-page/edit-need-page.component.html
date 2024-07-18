@@ -1,0 +1,19 @@
+<div class = "header">
+    <h1>{{title}}</h1>
+  </div>
+  <div class = "subheader">
+    <h2>
+    </h2>
+  </div>
+  <div class = "sidebar">
+  </div>
+  <div class="main">
+    <main>
+        ID: {{ needId }}
+        Name: <input type="text" [(ngModel)]="needName" placeholder="name...">
+        Cost: <input type="number"[(ngModel)]="needCost"placeholder="cost...">
+        Quantity: <input type="number"[(ngModel)]="needQuantity"placeholder="quantity...">
+        Type: <input type="text"[(ngModel)]="needType"placeholder="type...">
+        <button (click)="confirmEdits()">Confirm</button>
+    </main>
+  </div>

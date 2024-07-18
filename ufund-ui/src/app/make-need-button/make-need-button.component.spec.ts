@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NeedMakerComponent } from './need-maker.component';
+import { MakeNeedButtonComponent } from './make-need-button.component';
 
-describe('NeedMakerComponent', () => {
-  let component: NeedMakerComponent;
-  let fixture: ComponentFixture<NeedMakerComponent>;
+describe('MakeNeedButtonComponent', () => {
+  let component: MakeNeedButtonComponent;
+  let fixture: ComponentFixture<MakeNeedButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NeedMakerComponent]
+      imports: [MakeNeedButtonComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(NeedMakerComponent);
+    fixture = TestBed.createComponent(MakeNeedButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
