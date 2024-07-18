@@ -1,7 +1,7 @@
 <div class="need_item">
     <h2>{{ need.id }}: {{ need.name }}<app-add-to-basket-button [need] = "this.need"></app-add-to-basket-button></h2>
     <h3>
-        Quantity: {{ need.quantity }}, Cost: {{ need.cost }}
+        Quantity: {{ need.quantity }}, Cost: {{ need.cost }}<app-delete-need-buton [need] = "this.need"></app-delete-need-buton>
         
     </h3>
     <h4>{{ need.type }}</h4>

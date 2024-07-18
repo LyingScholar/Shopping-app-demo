@@ -28,9 +28,15 @@ export class NeedService {
   }
 
   async searchNeeds(text: string): Promise<void> {
-    const needs: Need[] = await firstValueFrom(
+    var needs: Need[] = await firstValueFrom(
       this.http.get<Need[]>(`${this.apiUrl}/Needs/?name=${text}`));
       this.searchSubject = new BehaviorSubject<Need[]>(needs);
       this.search$ = this.searchSubject.asObservable();
+  }
+
+  async deleteNeed(id: number): Promise<Need> {
+    var need: Need = await firstValueFrom(
+      this.http.delete<Need>(`${this.apiUrl}/Needs/${id}`));
+      return need;
   }
 }
