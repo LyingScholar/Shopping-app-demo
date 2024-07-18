@@ -94,7 +94,7 @@ public class Cupboard {
      * 
      * @throws IOException when file cannot be accessed or written to
      */
-    private boolean save() throws IOException {
+    boolean save() throws IOException {
         Need[] needArray = getNeedsArray();
 
         // Serializes the Java Objects to JSON objects into the file
@@ -113,7 +113,7 @@ public class Cupboard {
      * 
      * @throws IOException when file cannot be accessed or read from
      */
-    private boolean load() throws IOException {
+    boolean load() throws IOException {
         needs = new TreeMap<>();
         nextId = 0;
 
@@ -121,14 +121,15 @@ public class Cupboard {
         // readValue will throw an IOException if there's an issue with the file
         // or reading from the file
         Need[] needArray = objectMapper.readValue(new File(filename),Need[].class);
-
         if (needArray != null) {
-            // Add each need to the tree map and keep track of the greatest id
-            for (Need need : needArray) {
-                needs.put(need.getId(),need);
-                if (need.getId() > nextId)
-                    nextId = need.getId();
-            }
+        if (needArray != null) {
+                // Add each need to the tree map and keep track of the greatest id
+                for (Need need : needArray) {
+                    needs.put(need.getId(),need);
+                    if (need.getId() > nextId)
+                        nextId = need.getId();
+                }
+        }
             // Make the next id one greater than the maximum from the file
             ++nextId;
             return true;
@@ -160,12 +161,16 @@ public class Cupboard {
     public boolean checkForANeed(String name) {
         synchronized(needs) {
             Need[] needArray = getNeedsArray();
-            for (Need need : needArray) {
-                if (need.getName().equals(name)) {
-                    return true;
+            if (needArray == null) {
+                return false;
+            } else {
+                for (Need need : needArray) {
+                    if (need.getName().equals(name)) {
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
     }
     /**
@@ -190,13 +195,19 @@ public class Cupboard {
             // We create a new need object because the id field is immutable
             // and we need to assign the next unique id
             if (!checkForANeed(need.getName())) {
-                Need newNeed = new Need(nextId(),need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                Need newNeed;
+                if (isEmpty()) {
+                    newNeed = new Need(1,need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                    nextId = 2;
+                } else {
+                    newNeed = new Need(nextId(),need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                }
                 needs.put(newNeed.getId(),newNeed);
                 save(); // may throw an IOException
                 return newNeed;
             } else {
                 return null;
-            } 
+            }
         }
     }
 
@@ -241,6 +252,16 @@ public class Cupboard {
         synchronized(needs) {
             needs.remove(need.getId());
             save();
+        }
+    }
+
+    public boolean isEmpty() {
+        synchronized(needs) {
+            if (getNeedsArray() == null) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

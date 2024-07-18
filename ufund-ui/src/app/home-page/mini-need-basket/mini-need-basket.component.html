@@ -1,0 +1,29 @@
+<div class = "title">
+  {{ title }}
+</div>
+<div class = "list"
+  [ngClass]="{'lin-class': !loggedIn, 'lout-class': loggedIn}">
+  LIST HERE
+  <!-- Will make component with a list of the needs 
+   in your basket once we get there-->
+</div>
+
+
+
+
+
+
+<div class="title">
+    <h2>{{ title }}</h2>
+  </div>
+  
+  <div class="list" [ngClass]="{'list--hidden': !loggedIn, 'list--visible': loggedIn}">
+    <h3>Your Basket</h3>
+    <ul class="need-list">
+      <!-- Placeholder for the list of needs, should link this later -->
+      <li>Need item 1</li>
+      <li>Need item 2</li>
+      <li>Need item 3</li>
+    </ul>
+    <!-- Will make list of the needs when we get there -->
+  </div>

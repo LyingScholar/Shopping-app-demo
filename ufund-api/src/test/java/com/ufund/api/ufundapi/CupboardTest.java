@@ -60,6 +60,25 @@ public class CupboardTest {
         assertEquals("Type A", retrievedNeeds[2].getType());
 
     }
+
+    /**
+     * @throws IOException
+     * created a test file to act as cupboard
+     * testing each value of each need to verify read, write capabilities
+     * also tested all needs get retrieved successfully
+     */
+    @Test
+    public void testGetAllNeeds_NoNeeds() throws IOException {
+        File testFile = File.createTempFile("test", ".json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Need[] initialNeeds = {};
+
+        objectMapper.writeValue(testFile, initialNeeds);
+        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+
+    //Verifying nothing get retrieved
+    assertNull(cupboard.getNeeds());
+}
     
     /**
      * @throws IOException
@@ -100,6 +119,21 @@ public class CupboardTest {
 
     }
     
+
+    @Test
+    public void testFindNeedsWithNoMatch() throws IOException {
+        File testFile = File.createTempFile("test", ".json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Need[] initialNeeds = {new Need(1, "Need 1", 10, 100, "Type A")};
+        objectMapper.writeValue(testFile, initialNeeds);
+
+        Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+        Need[] foundNeeds = cupboard.findNeeds("Nonexistent");
+
+        assertNull(foundNeeds);
+
+        testFile.delete();
+    }
 
     @Test
     public void testCheckForANeed() throws IOException {
@@ -174,22 +208,60 @@ public class CupboardTest {
 public void testCreateNeed() throws IOException {
     File testFile = File.createTempFile("test", ".json");
     ObjectMapper objectMapper = new ObjectMapper();
-    Need[] initialNeeds = {};
+    Need[] initialNeeds = new Need[0];
     objectMapper.writeValue(testFile, initialNeeds);
     
     Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
-    
+    cupboard.load();
     Need newNeed = new Need(0, "New Need", 5, 50, "Type C");
     Need createdNeed = cupboard.createNeed(newNeed);
     
     assertNotNull(createdNeed);
     assertEquals("New Need", createdNeed.getName());
+    assertEquals(5, createdNeed.getQuantity());
+    assertEquals(50.0, createdNeed.getCost(), 0.001);
+    assertEquals("Type C", createdNeed.getType());
     assertTrue(createdNeed.getId() > 0);
     
+
+    Need retrievedNeed = cupboard.getNeed(createdNeed.getId());
+    assertNotNull(retrievedNeed);
+    assertEquals(createdNeed, retrievedNeed);
+
+
     // Try to create a duplicate need
-    Need duplicateNeed = cupboard.createNeed(newNeed);
+    Need duplicateNeed = cupboard.createNeed(new Need(0, "New Need", 10, (int) 100.0, "Type D"));
     assertNull(duplicateNeed);
+
+    retrievedNeed = cupboard.getNeed(createdNeed.getId());
+    
+    assertEquals(5, retrievedNeed.getQuantity());
+    assertEquals(50.0, retrievedNeed.getCost(), 0.001);
+    assertEquals("Type C", retrievedNeed.getType());
+
+    testFile.delete();
+
+
 }
+
+@Test
+public void testCreateNeedWithNonEmptyCupboard() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {new Need(1, "Initial Need", 10, 100, "Type A")};
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    Need newNeed = new Need(0, "New Need", 5, 50, "Type B");
+    Need createdNeed = cupboard.createNeed(newNeed);
+
+    assertNotNull(createdNeed);
+    assertTrue(createdNeed.getId() > 1);
+    assertEquals("New Need", createdNeed.getName());
+
+    testFile.delete();
+}
+
 
     /**
      * @throws IOException
@@ -252,5 +324,95 @@ public void testUpdateNeed() throws IOException {
     result = cupboard.updateNeed(nonExistentNeed);
     assertNull(result);
 }
+
+@Test
+public void testIsEmptyWhenEmpty() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {};
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    assertTrue(cupboard.isEmpty());
+
+    testFile.delete();
+}
+
+@Test
+public void testIsEmptyWhenNotEmpty() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {new Need(1, "Need 1", 10, 100, "Type A")};
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    assertFalse(cupboard.isEmpty());
+
+    testFile.delete();
+}
+
+@Test
+public void testAddNeedAndRemoveNeed() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {};
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    
+    Need newNeed = new Need(1, "New Need", 5, 50, "Type A");
+    cupboard.addNeed(newNeed);
+    
+    assertNotNull(cupboard.getNeed(1));
+    assertEquals("New Need", cupboard.getNeed(1).getName());
+
+    cupboard.removeNeed(newNeed);
+    assertNull(cupboard.getNeed(1));
+
+    testFile.delete();
+}
+
+
+
+@Test
+public void testLoadMethodUSucceess() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {
+        new Need(1, "Need 1", 10, 100, "Type A"),
+        new Need(2, "Need 2", 5, 50, "Type B")
+    };
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    cupboard.load();
+
+    Need[] loadedNeeds = cupboard.getNeeds();
+    assertEquals(2, loadedNeeds.length);
+    assertEquals("Need 1", loadedNeeds[0].getName());
+    assertEquals("Need 2", loadedNeeds[1].getName());
+
+    testFile.delete();
+}
+
+@Test
+public void testSaveMethodWhenCupboardIsNotEmpty() throws IOException {
+    File testFile = File.createTempFile("test", ".json");
+    ObjectMapper objectMapper = new ObjectMapper();
+    Need[] initialNeeds = {};
+    objectMapper.writeValue(testFile, initialNeeds);
+
+    Cupboard cupboard = new Cupboard(testFile.getAbsolutePath(), objectMapper);
+    cupboard.createNeed(new Need(0, "New Need", 5, 50, "Type A"));
+
+    assertTrue(cupboard.save());
+
+    Need[] savedNeeds = objectMapper.readValue(testFile, Need[].class);
+    assertEquals(1, savedNeeds.length);
+    assertEquals("New Need", savedNeeds[0].getName());
+
+    testFile.delete();
+}
+
 
 }
