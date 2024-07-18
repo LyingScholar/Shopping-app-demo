@@ -1,1 +1,1 @@
-[{"id":1,"name":"School Supplies","quantity":100,"cost":500,"type":"Education"}]
+[{"id":1,"name":"School Supplies","quantity":100,"cost":500,"type":"Education"}{"id":4,"name":"Complete Homework","quantity":75,"cost":750,"type":"Education"},{"id":5,"name":"Work on next user story","quantity":40,"cost":2000,"type":"Backend"},{"id":7,"name":"Donate textbooks","quantity":25,"cost":1250,"type":"Education"},{"id":9,"name":"Donate Laptop Computers","quantity":10,"cost":5000,"type":"Education"},{"id":10,"name":"Create presenation","quantity":60,"cost":2400,"type":"Project"}]
