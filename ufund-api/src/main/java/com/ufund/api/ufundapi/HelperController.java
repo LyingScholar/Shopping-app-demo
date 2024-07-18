@@ -18,15 +18,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Handles the REST API requests for the User resource
- * Test commit
+ * Handles the REST API requests for the Helper resource
  * <p>
  * {@literal @}RestController Spring annotation identifies this class as a REST API
  * method handler to the Spring framework
+ * </p>
+ * <p>
+ * {@literal @}RequestMapping maps HTTP requests to handler methods of MVC and REST controllers
+ * </p>
  * 
- * @author Team 2
+ * @autor Team 2
  */
-
 @RestController
 @RequestMapping("Helper")
 public class HelperController {
@@ -35,9 +37,10 @@ public class HelperController {
     private UserDB userDB;
 
     /**
-     * Creates a REST API controller to reponds to requests
+     * Creates a Helper Controller to respond to requests
      * 
-     * @param UserDB The {@link UserDB User Data Access Object} to perform CRUD operations
+     * @param cupboard The {@link Cupboard} to manage needs
+     * @param userDB The {@link UserDB} User Data Access Object to perform CRUD operations
      * <br>
      * This dependency is injected by the Spring Framework
      */
@@ -46,57 +49,80 @@ public class HelperController {
         this.userDB = userDB;
     }
 
+    /**
+     * Handles the GET request to view all needs.
+     * 
+     * @return a {@link ResponseEntity} containing an array of {@link Need} objects and HTTP status
+     */
     @GetMapping("/needs")
     public ResponseEntity<Need[]> viewNeeds() {
-        LOG.info("GET /Helper");
+        LOG.info("GET /Helper/needs");
         try {
             Need[] cupboardNeeds = cupboard.getNeeds();
             if (cupboardNeeds != null)
-                return new ResponseEntity<Need[]>(cupboardNeeds,HttpStatus.OK);
+                return new ResponseEntity<>(cupboardNeeds, HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /**
+     * Handles the GET request to search for needs by name.
+     * 
+     * @param name the name to search for
+     * @return a {@link ResponseEntity} containing an array of {@link Need} objects and HTTP status
+     */
     @GetMapping("/needs/search/")
-    public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
-        LOG.info("GET /Helper/?name="+name);
+    public ResponseEntity<Need[]> searchNeeds(@RequestParam(required = false) String name) {
+        LOG.info("GET /Helper/needs/search/?name=" + name);
         
         try {
             Need[] needs = cupboard.findNeeds(name);
             if (needs != null)
-                return new ResponseEntity<>(needs,HttpStatus.OK);
+                return new ResponseEntity<>(needs, HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Handles the POST request to create a new Helper.
+     * 
+     * @param helper the {@link Helper} object to create
+     * @return a {@link ResponseEntity} containing the created {@link Helper} object and HTTP status
+     */
     @PostMapping("")
     public ResponseEntity<User> createHelper(@RequestBody Helper helper) {
         LOG.info("POST /Helper " + helper);
         
         try {
             Helper newHelper = userDB.createHelper(helper);
-            if (newHelper  != null) {
-                return new ResponseEntity<>(newHelper,HttpStatus.CREATED);
+            if (newHelper != null) {
+                return new ResponseEntity<>(newHelper, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        
     }
 
+    /**
+     * Handles the GET request to view the funding basket of a Helper by user ID.
+     * 
+     * @param userId the ID of the user
+     * @return a {@link ResponseEntity} containing an ArrayList of {@link Need} objects and HTTP status
+     */
     @GetMapping("/fundingBasket/")
-    public ResponseEntity<ArrayList<Need>> viewFundingBasket(@RequestParam(required=true) int userId) {
-        LOG.info("GET /Helper/?userId="+userId);
+    public ResponseEntity<ArrayList<Need>> viewFundingBasket(@RequestParam(required = true) int userId) {
+        LOG.info("GET /Helper/fundingBasket/?userId=" + userId);
         
         try {
             Helper helper = userDB.getHelper(userId);
@@ -107,19 +133,26 @@ public class HelperController {
             } else {
                 ArrayList<Need> fundingBasket = helper.getFundingBasket();
                 if (fundingBasket != null)
-                    return new ResponseEntity<>(fundingBasket,HttpStatus.OK);
+                    return new ResponseEntity<>(fundingBasket, HttpStatus.OK);
                 else
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /**
+     * Handles the PUT request to add a need to the funding basket of a Helper by user ID and need ID.
+     * 
+     * @param userId the ID of the user
+     * @param needId the ID of the need
+     * @return a {@link ResponseEntity} containing the {@link Need} object and HTTP status
+     */
     @PutMapping("/fundingBasket/{userId}/{needId}")
     public ResponseEntity<Need> addNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
-        LOG.info("PUT /Helper/" + userId + "/" + needId);
+        LOG.info("PUT /Helper/fundingBasket/" + userId + "/" + needId);
 
         try {
             User user = userDB.getUser(userId);
@@ -139,14 +172,21 @@ public class HelperController {
                 }  
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /**
+     * Handles the DELETE request to remove a need from the funding basket of a Helper by user ID and need ID.
+     * 
+     * @param userId the ID of the user
+     * @param needId the ID of the need
+     * @return a {@link ResponseEntity} containing the HTTP status
+     */
     @DeleteMapping("fundingBasket/delete/{userId}/{needId}")
     public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
-        LOG.info("DELETE /Helper/" + userId + "/" + needId);
+        LOG.info("DELETE /Helper/fundingBasket/delete/" + userId + "/" + needId);
 
         try {
             User user = userDB.getUser(userId);
@@ -166,14 +206,20 @@ public class HelperController {
                 } 
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /**
+     * Handles the PUT request to clear the funding basket of a Helper by user ID.
+     * 
+     * @param userId the ID of the user
+     * @return a {@link ResponseEntity} containing the HTTP status
+     */
     @PutMapping("/checkout/{userId}")
     public ResponseEntity<Need> checkout(@PathVariable(required = true) int userId) {
-        LOG.info("PUT /Helper/" + userId);
+        LOG.info("PUT /Helper/checkout/" + userId);
 
         try {
             User user = userDB.getUser(userId);
@@ -187,9 +233,8 @@ public class HelperController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

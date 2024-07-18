@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.when;
@@ -138,39 +139,46 @@ public class NeedsControllerTest {
 
 
     @Test
-    void testcreateNewNeed_Success() throws IOException {
-        Need newNeed = new Need(1, "New Need", 30, 300, "Food");
-        when(cupboard.createNeed(newNeed)).thenReturn(newNeed);
-
-        ResponseEntity<Need> response = needController.createNeed(newNeed);
-
+    void testCreateNewNeed_Success() throws IOException {
+        String name = "New Need";
+        String type = "Food";
+        int quantity = 30;
+        int cost = 300;
+    
+        Need expectedNeed = new Need(1, name, quantity, cost, type);
+        when(cupboard.createNeed(any(Need.class))).thenReturn(expectedNeed);
+    
+        ResponseEntity<Need> response = needController.createNeed(name, type, quantity, cost);
+    
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
-        assertEquals(newNeed, response.getBody());
+        assertEquals(expectedNeed, response.getBody());
     }
 
     @Test
-    void testcreateNewNeed_Conflict() throws IOException {
-        Need need1 = new Need(1, "New Need", 30, 300, "Food");
-        Need need2 = new Need(2, "New Need", 30, 300, "Food");
-        when(cupboard.createNeed(need1)).thenReturn(need1);
-        when(cupboard.createNeed(need2)).thenReturn(null);
-
-        ResponseEntity<Need> firstResponse = needController.createNeed(need1);
-        assertEquals(HttpStatus.CREATED, firstResponse.getStatusCode());
-        assertEquals(need1, firstResponse.getBody());
-
-        ResponseEntity<Need> secondResponse = needController.createNeed(need2);
-        assertEquals(HttpStatus.CONFLICT, secondResponse.getStatusCode());
-        assertNull(secondResponse.getBody());
+    void testCreateNewNeed_Conflict() throws IOException {
+        String name = "New Need";
+        String type = "Food";
+        int quantity = 30;
+        int cost = 300;
+    
+        when(cupboard.createNeed(any(Need.class))).thenReturn(null);
+    
+        ResponseEntity<Need> response = needController.createNeed(name, type, quantity, cost);
+    
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test
     void testCreateNeed_ExceptionThrown() throws IOException {
-    Need need1 = new Need(1, "New Need", 30, 300, "Food");
-    when(cupboard.createNeed(need1)).thenThrow(new IOException("Test IO exception"));
-
-    ResponseEntity<Need> response = needController.createNeed(need1);
+        String name = "New Need";
+        String type = "Food";
+        int quantity = 30;
+        int cost = 300;
+        when(cupboard.createNeed(any(Need.class))).thenThrow(new IOException("Test IO exception"));
+    
+    ResponseEntity<Need> response = needController.createNeed(name, type, quantity, cost);
+    
 
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     assertNull(response.getBody());
@@ -178,32 +186,49 @@ public class NeedsControllerTest {
 
 
     @Test
-    void testupdateNeed_Success() throws IOException{
-        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
-        when(cupboard.updateNeed(updatedNeed)).thenReturn(updatedNeed);
-
-        ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
-
+    void testUpdateNeed_Success() throws IOException {
+        String id = "1";
+        String name = "Updated Need";
+        String type = "Food";
+        int quantity = 40;
+        int cost = 400;
+    
+        Need expectedNeed = new Need(Integer.parseInt(id), name, quantity, cost, type);
+        when(cupboard.updateNeed(any(Need.class))).thenReturn(expectedNeed);
+    
+        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
+    
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedNeed, response.getBody());
+        assertEquals(expectedNeed, response.getBody());
     }
 
     @Test
     void testupdateNeed_NeedDosntExist() throws IOException {
-        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
-        when(cupboard.updateNeed(updatedNeed)).thenReturn(null);
-
-        ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
-
+        String id = "1";
+        String name = "Updated Need";
+        String type = "Food";
+        int quantity = 40;
+        int cost = 400;
+    
+        when(cupboard.updateNeed(any(Need.class))).thenReturn(null);
+    
+        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
+    
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test
     void testupdateNeed_ThrowsError() throws IOException{
-        Need updatedNeed = new Need(1, "Updatee Need", 43, 400, "Non-Fod");
-        when(cupboard.updateNeed(updatedNeed)).thenThrow(new IOException("Test IO exception"));
+        String id = "1";
+        String name = "Updated Need";
+        String type = "Food";
+        int quantity = 40;
+        int cost = 400;
+    
+        when(cupboard.updateNeed(any(Need.class))).thenThrow(new IOException("Test IO exception"));
 
-        ResponseEntity<Need> response = needController.updateNeed(updatedNeed);
+        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNull(response.getBody());

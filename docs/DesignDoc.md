@@ -14,7 +14,7 @@ geometry: margin=1in
   * Rushil Patel
   * Jacob Eggleston
   * Quinton Miller
-  * Micheal Bhardwaj
+  * Michael Bhardwaj
 
 ## Executive Summary
 
@@ -25,6 +25,7 @@ their needs.
 ### Purpose
 >  _**[Sprint 2 & 4]** Provide a very brief statement about the project and the most
 > important user group and user goals._
+
 The purpose of this project is to create a application that introduces a Need management service for companies, such that an admin can given helpers a list of needs to be completed and the helpers can take the needs, complete them, and checkout to signify fcompleting thier needs.
 
 ### Glossary and Acronyms
