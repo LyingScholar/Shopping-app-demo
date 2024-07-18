@@ -263,7 +263,5 @@ public class Cupboard {
                 return false;
             }
         }
-    }
-
-    
+    }    
 }

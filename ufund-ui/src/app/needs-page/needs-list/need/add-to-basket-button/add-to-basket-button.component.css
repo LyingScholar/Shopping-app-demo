@@ -17,3 +17,9 @@
 .add_to_basket:hover {
     background: rgb(79, 167, 139);
 }
+.hidden_class {
+    visibility: hidden;
+}
+.visible_class {
+    visibility: visible;
+}

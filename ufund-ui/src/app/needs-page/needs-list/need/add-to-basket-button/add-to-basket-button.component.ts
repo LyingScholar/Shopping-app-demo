@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Need } from '../../need';
-import { LinloutService } from '../../../../linlout.service';
-import { UserService } from '../../../../user.service';
+import { Need } from '../../../../need';
+import { LinloutService } from '../../../../services/linlout.service';
+import { UserService } from '../../../../services/user.service';
 import { User } from '../../../../user';
 import { Router } from '@angular/router';
 
@@ -23,12 +23,24 @@ export class AddToBasketButtonComponent {
   };
   userId: number = 0;
   username: string = '';
+  admin: boolean = false;
+  loggedIn: boolean = false;
 
   constructor (private router: Router,private linloutService: LinloutService,private userService: UserService) {
     this.linloutService.user$.subscribe((user: User) => {
       this.user = user;
       this.userId = user.id;
       this.username = user.name;
+    })
+    this.linloutService.text$.subscribe(text => {
+      if(text == 'LOGIN') {
+        this.loggedIn = false;
+      } else {
+        this.loggedIn = true;
+      }
+    })
+    this.linloutService.admin$.subscribe((admin: boolean) => {
+      this.admin = admin;
     })
   }
 

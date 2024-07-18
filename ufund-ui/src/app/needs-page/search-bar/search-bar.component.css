@@ -2,7 +2,11 @@
     display: flex;
     margin-bottom: 20px;
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> b3b7ee152bc768bcc084e1f7da91040e35af408c
   input {
     flex: 1;
     padding: 8px;
@@ -10,7 +14,11 @@
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> b3b7ee152bc768bcc084e1f7da91040e35af408c
 
   button {
     padding: 2px;
@@ -28,7 +36,11 @@
     border: none;
     border-radius: 5px;
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> b3b7ee152bc768bcc084e1f7da91040e35af408c
   button:hover {
         background: rgb(79, 167, 139);
 }

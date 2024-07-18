@@ -43,7 +43,7 @@
     border-bottom: none;
   }
   
-  .button--hidden {
+.button--hidden {
     opacity: 0;
     visibility: hidden;
 }
@@ -51,10 +51,10 @@
     display: block;
 }
   
-  .button--visible {
+.button--visible {
     opacity: 1;
     visibility: visible;
-  }
+}
 
   .basket--hidden {
     opacity: 0;

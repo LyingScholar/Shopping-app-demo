@@ -1,12 +1,13 @@
 <div class="title">
     <h2>{{ title }}</h2>
 </div>
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-<div class="basket" [ngClass]="{'basket--hidden': !loggedIn, 'basket--visible': loggedIn}">
+<div *ngIf="errorMessage && loggedIn && !admin" class="error-message">{{ errorMessage }}</div>
+<div class="basket" [ngClass]="{'basket--hidden': !(!admin && loggedIn), 'basket--visible': !admin && loggedIn}">
     <div class="list" *ngFor="let need of needs">
       <app-need-preview [need]="need"></app-need-preview>
     </div>
-  <div class="button" [ngClass]="{'button--hidden': !(needs.length > 0), 'button--visible': (needs.length > 0)}">
+  <div class="button" *ngIf="loggedIn && !admin && (needs.length > 0)">
     <app-checkout-button></app-checkout-button>
   </div>
 </div>
+<!--[ngClass]="{'button--hidden': !(needs.length > 0) || !loggedIn || admin, 'button--visible': (needs.length > 0) && loggedIn && !admin}"-->

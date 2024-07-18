@@ -4,8 +4,8 @@ import { firstValueFrom } from 'rxjs';
 
 import { Observable, of } from 'rxjs';
 
-import { User } from './user';
-import { Need } from './needs-page/needs-list/need';
+import { User } from '../user';
+import { Need } from '../need';
 
 @Injectable({
   providedIn: 'root'

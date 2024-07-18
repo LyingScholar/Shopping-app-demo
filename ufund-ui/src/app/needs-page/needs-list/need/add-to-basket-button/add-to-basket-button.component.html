@@ -1,4 +1,5 @@
 <button class="add_to_basket"
-(click)="addToBasket()">
+(click)="addToBasket()"
+*ngIf="!admin && loggedIn">
     ADD
 </button>
