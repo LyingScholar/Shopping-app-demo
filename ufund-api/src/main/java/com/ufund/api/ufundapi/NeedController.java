@@ -133,11 +133,13 @@ public class NeedController {
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @PostMapping("")
-    public ResponseEntity<Need> createNeed(@RequestBody Need Need) {
-        LOG.info("POST /Needs " + Need);
+    public ResponseEntity<Need> createNeed(@RequestParam() String name, @RequestParam() String type, 
+                                            @RequestParam() int quantity, @RequestParam() int cost) {
+        LOG.info("POST /Needs/" + name + "/" + quantity + "/" + cost + "/" + type);
         
         try {
-            Need newNeed = Cupboard.createNeed(Need);
+            Need initialNeed = new Need(1, name, quantity, cost, type);
+            Need newNeed = Cupboard.createNeed(initialNeed);
             if (newNeed  != null) {
                 return new ResponseEntity<>(newNeed,HttpStatus.CREATED);
             } else {
