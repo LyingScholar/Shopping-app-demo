@@ -1,5 +1,5 @@
 <button class="add_to_basket"
 (click)="addToBasket()"
-[ngClass]="{'hidden_class': !(!admin && loggedIn),'visible_class': !admin && loggedIn}">
+*ngIf="!admin && loggedIn">
     ADD
 </button>

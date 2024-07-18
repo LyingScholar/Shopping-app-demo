@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom,BehaviorSubject, Observable } from 'rxjs';
 import { Need } from '../need';
 
 @Injectable({
@@ -9,6 +9,9 @@ import { Need } from '../need';
 export class NeedService {
 
   private apiUrl = 'http://localhost:8080';
+
+  searchSubject: BehaviorSubject<Need[]> = new BehaviorSubject<Need[]>([]);
+  search$: Observable<Need[]> = this.searchSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -22,5 +25,12 @@ export class NeedService {
       console.error('Error', error);
       return [];
     }
+  }
+
+  async searchNeeds(text: string): Promise<void> {
+    const needs: Need[] = await firstValueFrom(
+      this.http.get<Need[]>(`${this.apiUrl}/Needs/?name=${text}`));
+      this.searchSubject = new BehaviorSubject<Need[]>(needs);
+      this.search$ = this.searchSubject.asObservable();
   }
 }

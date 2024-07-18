@@ -13,13 +13,23 @@ import { CommonModule } from '@angular/common';
   styleUrl: './needs-list.component.css'
 })
 export class NeedsListComponent implements OnInit{
+  allNeeds: Need[] = [];
   needs: Need[] = [];
   errorMessage: string = '';
 
-  constructor (private needService: NeedService) {}
+  constructor (private needService: NeedService) {
+    this.needService.search$.subscribe((needs: Need[]) => {
+      if (needs == null || needs.length == 0) {
+        this.needs = this.allNeeds;
+      } else {
+        this.needs = needs;
+      }
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     await this.needService.callGetNeeds().then(needs => {
+      this.allNeeds = needs;
       this.needs = needs;
     }, (error) => {
       console.error('Error getting needs', error);
