@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +45,13 @@ public class HelperController {
         this.cupboard = cupboard;
         this.userDB = userDB;
     }
-
+    /**
+     * Responds to the GET request for all {@linkplain Need Needes}
+     * 
+     * @return ResponseEntity with array of {@link Need Need} objects (may be empty) and
+     * HTTP status of OK<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
     @GetMapping("/needs")
     public ResponseEntity<Need[]> viewNeeds() {
         LOG.info("GET /Helper");
@@ -60,7 +66,16 @@ public class HelperController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * Responds to the GET request for all {@linkplain Need Needes} whose name contains
+     * the text in name
+     * 
+     * @param name The name parameter which contains the text used to find the {@link Need Needes}
+     * 
+     * @return ResponseEntity with array of {@link Need Need} objects (may be empty) and
+     * HTTP status of OK<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
     @GetMapping("/needs/search/")
     public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
         LOG.info("GET /Helper/?name="+name);
@@ -76,6 +91,12 @@ public class HelperController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /**
+     * Create a {@link Helper Helper} with the provided object
+     * @return response entity with {@link Helper Helper} and HTTP status CREATED
+     * ResponseEntity with HTTP status of CONFLICT when helper already exists
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
     @PostMapping("")
     public ResponseEntity<User> createHelper(@RequestBody Helper helper) {
         LOG.info("POST /Helper " + helper);
@@ -93,7 +114,14 @@ public class HelperController {
         }
         
     }
-
+    /** 
+     * view the funding basket of a Helper
+     * @param id of the helper whose basket you wish to view
+     * @return response entity with the Helper's funding basket and HTTP status OK
+     * ResponseEntity with HTTP status of CONFLICT when helper == null
+     * ResponseEntity with HTTP status of NOT_FOUND when the funding basket is null
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+    */
     @GetMapping("/fundingBasket/")
     public ResponseEntity<ArrayList<Need>> viewFundingBasket(@RequestParam(required=true) int userId) {
         LOG.info("GET /Helper/?userId="+userId);
@@ -116,7 +144,15 @@ public class HelperController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * adds a need to a {@link Helper Helper} funding basket
+     * @param userId the ID of the Helper
+     * @param needId the ID of the need from the cupboard
+     * @return responesentity of the {@link Need need} added with HTTP status OK
+     * Response entity with HTTP status of forbidden if the user is not a helper
+     * Response entity with HTTP status of NOT FOUND if the need is null
+     * Response entity with HTTP status of INTERNAL SERVER ERROR otherwise
+     */
     @PutMapping("/fundingBasket/{userId}/{needId}")
     public ResponseEntity<Need> addNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
         LOG.info("PUT /Helper/" + userId + "/" + needId);
@@ -143,7 +179,15 @@ public class HelperController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * Removes a {@link Need need} from the {@link Helper Helper} Funding basket
+     * @param userId the ID of the helper
+     * @param needId the ID of the need
+     * @return responesentity with HTTP status OK
+     * Response entity with HTTP status of forbidden if the user is not a helper
+     * Response entity with HTTP status of NOT FOUND if the need is null or the user is null
+     * Response entity with HTTP status of INTERNAL SERVER ERROR otherwise
+     */
     @DeleteMapping("fundingBasket/delete/{userId}/{needId}")
     public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
         LOG.info("DELETE /Helper/" + userId + "/" + needId);
@@ -170,7 +214,14 @@ public class HelperController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * Performs the checkout of a {@link Need need} from the {@link Helper Helper} funding basket
+     * @param userId the id of the Helper whose basket is being checked out
+     * @return responesentity with HTTP status OK
+     * Response entity with HTTP status of forbidden if the user is not a helper
+     * Response entity with HTTP status of NOT FOUND if the user is null
+     * Response entity with HTTP status of INTERNAL SERVER ERROR otherwise
+     */
     @PutMapping("/checkout/{userId}")
     public ResponseEntity<Need> checkout(@PathVariable(required = true) int userId) {
         LOG.info("PUT /Helper/" + userId);

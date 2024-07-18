@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class Cupboard {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(Cupboard.class.getName());
     Map<Integer,Need> needs;   // Provides a local cache of the need objects
                                 // so that we don't need to read from the file

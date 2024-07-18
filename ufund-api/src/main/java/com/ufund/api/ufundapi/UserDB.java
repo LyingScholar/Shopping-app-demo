@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class UserDB {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(UserDB.class.getName());
     Map<Integer,User> users;   // Provides a local cache of the user objects
                                 // so that we don't user to read from the file
@@ -108,7 +109,11 @@ public class UserDB {
         helperArrayList.toArray(helperArray);
         return helperArray;
     }
-
+   /**
+     * Logs in a {@linkplain Helper helpers}
+     * @param username the username the user is attempting to login with
+     * @return  An integer status code (1 = no user, 2 = already logged in, 3 = success)
+     */
     public int login(String username) {
         // User doesn't exist
         if (checkForAUser(username) == false) {
@@ -123,7 +128,11 @@ public class UserDB {
             return 3;
         }
     }
-    
+       /**
+     * Logs out a {@linkplain Helper helpers}
+     * @param username the username the user is attempting to login with
+     * @return  An integer status code (1 = no user, 2 = already logged in, 3 = success)
+     */
     public int logout(String username) {
         // User doesn't exist
         if (checkForAUser(username) == false) {
@@ -236,7 +245,9 @@ public class UserDB {
                 return null;
         }
     }
-
+    /**
+    ** {@inheritDoc}
+     */
     public Helper getHelper(int id) {
         synchronized(helpers) {
             if (helpers.containsKey(id))
@@ -245,7 +256,9 @@ public class UserDB {
                 return null;
         }
     }
-
+    /**
+    ** {@inheritDoc}
+     */
     public User getUserByName(String name) {
         synchronized(users) {
             User[] userArray = getUsersArray();
@@ -257,7 +270,9 @@ public class UserDB {
             return null;
         }
     }
-
+    /**
+    ** {@inheritDoc}
+     */
     public boolean checkForAUser(String name) {
         synchronized(users) {
             User[] userArray = getUsersArray();
@@ -269,7 +284,9 @@ public class UserDB {
             return false;
         }
     }
-
+    /**
+    ** {@inheritDoc}
+     */
     public boolean checkForALoggedInUser(String name) {
         synchronized(loggedInUsers) {
             for (User user : loggedInUsers) {
@@ -299,6 +316,9 @@ public class UserDB {
         }
     }
 
+    /**
+    ** {@inheritDoc}
+     */
     public Helper createHelper(Helper helper) throws IOException {
         synchronized(users) {
             // We create a new user object because the id field is immutable

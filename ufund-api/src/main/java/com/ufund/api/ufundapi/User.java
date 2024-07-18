@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class User {
 
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(User.class.getName());
 
     // Package private for tests

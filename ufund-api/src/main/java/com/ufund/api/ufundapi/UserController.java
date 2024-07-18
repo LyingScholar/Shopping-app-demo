@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.ufund.api.ufundapi.User;
-import com.ufund.api.ufundapi.UserDB;
+//import com.ufund.api.ufundapi.User;
+//import com.ufund.api.ufundapi.UserDB;
 
 /**
  * Handles the REST API requests for the User resource

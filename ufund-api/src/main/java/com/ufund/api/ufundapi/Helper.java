@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Helper extends User {
 
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(Helper.class.getName());
 
     @JsonProperty("fundingBasket") private ArrayList<Need> fundingBasket;
@@ -26,22 +27,38 @@ public class Helper extends User {
         super(id, name, admin);
         this.fundingBasket = new ArrayList<Need>();
     }
-
+    /**
+     * retrieves the helpers funding basket
+     * @return the funding basket
+     */
     public ArrayList<Need> getFundingBasket() {
         return this.fundingBasket;
     }
-
+    /**
+     * adds the {@link Need need} to the Helpers funding basket
+     * @param need the need object to be added
+     */
     public void addNeed(Need need) {
         fundingBasket.add(need);
     }
-    
+    /**
+     * checks out the users funding basket (clears it)
+     */
     public void checkout() {
         fundingBasket.clear();
     }
-
+    /**
+     * removes a {@link Need need} from the Helper's funding basket
+     * @param need the need to be removed
+     */
     public void removeNeed(Need need) {
         fundingBasket.remove(need);
     }
+    /**
+     * retrieves a specific {@link Need need}
+     * @param needId the ID of the need
+     * @return the Need object 
+     */
     public Need getNeed(int needId) {
         for (Need need : fundingBasket) {
             if (need.getId() == needId) {
@@ -50,7 +67,9 @@ public class Helper extends User {
         }
         return null;
     }
-
+    /**
+     * provides a string representation of the helper
+     */
     @Override
     public String toString() {
         return "Helper";

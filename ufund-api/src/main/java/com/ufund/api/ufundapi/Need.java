@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Need {
 
+    @SuppressWarnings("unused")
     private static final Logger LOG = Logger.getLogger(Need.class.getName());
 
     // Package private for tests
@@ -52,9 +53,15 @@ public class Need {
      * @return The name of the need
      */
     public String getName() {return name;}
-
+    /**
+     * retrieves quantities of the need
+     * @return the quantity of the need
+     */
     public int getQuantity() {return quantity;}
-
+    /**
+     * 
+     * @return
+     */
     public int getCost() {return cost;}
 
     public String getType() {return type;}
