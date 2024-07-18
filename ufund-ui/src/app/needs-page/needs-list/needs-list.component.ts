@@ -1,29 +1,39 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { OnInit } from '@angular/core';
 import { Need } from '../../need';
 import { NeedService } from '../../services/need.service';
-import { Router } from '@angular/router';
+import { NeedComponent } from './need/need.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-search-bar',
+  selector: 'app-needs-list',
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './search-bar.component.html',
-  styleUrl: './search-bar.component.css'
+  imports: [NeedComponent,CommonModule],
+  templateUrl: './needs-list.component.html',
+  styleUrl: './needs-list.component.css'
 })
-
-export class SearchBarComponent {
-  searchTerm: string = '';
+export class NeedsListComponent implements OnInit{
+  allNeeds: Need[] = [];
   needs: Need[] = [];
+  errorMessage: string = '';
 
-  constructor(private needService: NeedService,private router: Router) {
+  constructor (private needService: NeedService) {
     this.needService.search$.subscribe((needs: Need[]) => {
-      this.needs = needs;
+      if (needs == null || needs.length == 0) {
+        this.needs = this.allNeeds;
+      } else {
+        this.needs = needs;
+      }
     });
   }
 
-  async callSearch(): Promise<void> {
-    await this.needService.searchNeeds(this.searchTerm);
-    //document.getElementById("needs-List").reload();
+  async ngOnInit(): Promise<void> {
+    await this.needService.callGetNeeds().then(needs => {
+      this.allNeeds = needs;
+      this.needs = needs;
+    }, (error) => {
+      console.error('Error getting needs', error);
+      this.errorMessage = 'Error getting needs. Try again.';
+    });
   }
 }
