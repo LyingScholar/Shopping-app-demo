@@ -94,7 +94,7 @@ public class Cupboard {
      * 
      * @throws IOException when file cannot be accessed or written to
      */
-    private boolean save() throws IOException {
+    boolean save() throws IOException {
         Need[] needArray = getNeedsArray();
 
         // Serializes the Java Objects to JSON objects into the file
