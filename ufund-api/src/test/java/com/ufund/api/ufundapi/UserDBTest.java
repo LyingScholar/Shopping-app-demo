@@ -22,15 +22,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 class UserDBTest {
 
     @Mock
-    private ObjectMapper objectMapper;
+    private ObjectMapper mockObjectMapper;
 
     private UserDB userDB;
 
     @BeforeEach
     void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
-        when(objectMapper.readValue(any(File.class), eq(User[].class))).thenReturn(new User[]{});
-        userDB = new UserDB("test.json", objectMapper);
+        
+        // Mocking the  empty user and helper arrays
+
+        when(mockObjectMapper.readValue(any(File.class), eq(User[].class))).thenReturn(new User[]{});
+        when(mockObjectMapper.readValue(any(File.class), eq(Helper[].class))).thenReturn(new Helper[]{});
+        
+        userDB = new UserDB("users.json", "helpers.json", mockObjectMapper);
     }
 
     @Test

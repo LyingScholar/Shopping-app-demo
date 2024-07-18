@@ -113,7 +113,7 @@ public class Cupboard {
      * 
      * @throws IOException when file cannot be accessed or read from
      */
-    private boolean load() throws IOException {
+    boolean load() throws IOException {
         needs = new TreeMap<>();
         nextId = 0;
 
