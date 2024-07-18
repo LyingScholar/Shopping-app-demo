@@ -1,1 +1,72 @@
-[{"id":10,"name":"Create presenation","quantity":60,"cost":2400,"type":"Project"}]
+[
+    {
+        "id": 1,
+        "name": "Buy School Supplies",
+        "quantity": 100,
+        "cost": 500,
+        "type": "Education"
+    },
+    {
+        "id": 2,
+        "name": "Donate Winter Coats",
+        "quantity": 50,
+        "cost": 1500,
+        "type": "Clothing"
+    },
+    {
+        "id": 3,
+        "name": "Donate Canned Food",
+        "quantity": 200,
+        "cost": 300,
+        "type": "Food"
+    },
+    {
+        "id": 4,
+        "name": "Complete Homework",
+        "quantity": 75,
+        "cost": 750,
+        "type": "Education"
+    },
+    {
+        "id": 5,
+        "name": "Work on next user story",
+        "quantity": 40,
+        "cost": 2000,
+        "type": "Backend"
+    },
+    {
+        "id": 6,
+        "name": "Finsih user UI",
+        "quantity": 30,
+        "cost": 600,
+        "type": "Frontend"
+    },
+    {
+        "id": 7,
+        "name": "Donate textbooks",
+        "quantity": 25,
+        "cost": 1250,
+        "type": "Education"
+    },
+    {
+        "id": 8,
+        "name": "Buy Water Bottles",
+        "quantity": 100,
+        "cost": 200,
+        "type": "Health"
+    },
+    {
+        "id": 9,
+        "name": "Donate Laptop Computers",
+        "quantity": 10,
+        "cost": 5000,
+        "type": "Education"
+    },
+    {
+        "id": 10,
+        "name": "Create presenation",
+        "quantity": 60,
+        "cost": 2400,
+        "type": "Project"
+    }
+]
