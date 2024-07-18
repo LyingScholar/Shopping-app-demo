@@ -113,7 +113,7 @@ public class Cupboard {
      * 
      * @throws IOException when file cannot be accessed or read from
      */
-    private boolean load() throws IOException {
+    boolean load() throws IOException {
         needs = new TreeMap<>();
         nextId = 0;
 
@@ -122,16 +122,20 @@ public class Cupboard {
         // or reading from the file
         Need[] needArray = objectMapper.readValue(new File(filename),Need[].class);
         if (needArray != null) {
-            // Add each need to the tree map and keep track of the greatest id
-            for (Need need : needArray) {
-                needs.put(need.getId(),need);
-                if (need.getId() > nextId)
-                    nextId = need.getId();
-            }
+        if (needArray != null) {
+                // Add each need to the tree map and keep track of the greatest id
+                for (Need need : needArray) {
+                    needs.put(need.getId(),need);
+                    if (need.getId() > nextId)
+                        nextId = need.getId();
+                }
         }
-        // Make the next id one greater than the maximum from the file
-        ++nextId;
-        return true;
+            // Make the next id one greater than the maximum from the file
+            ++nextId;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

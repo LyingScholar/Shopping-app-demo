@@ -256,4 +256,34 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Checks if a user is an admin
+     * 
+     * @param User The {@link User User} to update
+     * 
+     * @return ResponseEntity with updated {@link User User} object and HTTP status of OK if logged in<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if user doesn't exist<br>
+     */
+    @GetMapping("/check")
+    public ResponseEntity<User> adminCheck(@RequestParam(required=false) String username) {
+        LOG.info("GET /Users/check/?username=" + username);
+
+        try {
+            User user = UserDB.getUserByName(username);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                boolean isAdmin  = user.isAdmin();
+                if (isAdmin) {
+                    return new ResponseEntity<>(user, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(user, HttpStatus.FORBIDDEN);
+                }
+            }
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

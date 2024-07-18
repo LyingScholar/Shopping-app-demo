@@ -28,6 +28,6 @@ export class FinalizeButtonComponent {
 
   checkout(): void {
     this.userService.callCheckout(this.userId);
-    this.router.navigate(['/needs-page']);
+    this.router.navigate(['/home-page']);
   }
 }
