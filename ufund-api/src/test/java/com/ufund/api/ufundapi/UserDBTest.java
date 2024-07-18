@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
@@ -183,4 +186,102 @@ class UserDBTest {
         boolean failedDelete = userDB.deleteUser(2);
         assertFalse(failedDelete);
     }
+
+    @Test
+void testLogout() throws IOException {
+    User user = new User(1, "testUser", false);
+    userDB.createUser(user);
+    userDB.login("testUser");
+    
+    // Test success
+    int result = userDB.logout("testUser");
+    assertEquals(3, result);
+    
+    // Test for not logged in
+    result = userDB.logout("testUser");
+    assertEquals(2, result);
+    
+    
+    // Test  non-existent user
+    result = userDB.logout("nonexistentUser");
+    assertEquals(1, result);
+}
+
+
+// @Test
+@Test
+void testSave() throws IOException {
+    User user = new User(1, "testUser", false);
+    userDB.createUser(user);
+
+    //null values only worked this way, weird implemetation, do not touch
+    doNothing().when(mockObjectMapper).writeValue(any(File.class), any(User[].class));
+    doNothing().when(mockObjectMapper).writeValue(any(File.class), any(Helper[].class));
+
+    User newUser = new User(0, "newUser", false);
+    User createdUser = userDB.createUser(newUser);
+
+    assertNotNull(createdUser);
+    
+    // Verify that writeValue was called at least once for each type
+    verify(mockObjectMapper, atLeastOnce()).writeValue(any(File.class), any(User[].class));
+    verify(mockObjectMapper, atLeastOnce()).writeValue(any(File.class), any(Helper[].class));
+    
+    // Checking total number of invocations if needed
+    // int totalWriteValueCalls = mockingDetails(mockObjectMapper).getInvocations().size();
+    // System.out.println("Total writeValue calls: " + totalWriteValueCalls);
+}
+
+
+@Test
+void testLoad() throws IOException {
+    User[] mockUsers = {new User(1, "user1", false), new User(2, "user2", true)};
+    Helper[] mockHelpers = {new Helper(3, "helper1", true)};
+    
+    when(mockObjectMapper.readValue(any(File.class), eq(User[].class))).thenReturn(mockUsers);
+    when(mockObjectMapper.readValue(any(File.class), eq(Helper[].class))).thenReturn(mockHelpers);
+    UserDB newUserDB = new UserDB("users.json", "helpers.json", mockObjectMapper);
+    
+    User[] users = newUserDB.getUsers();
+    assertEquals(3, users.length);
+    
+    User user = newUserDB.getUser(1);
+    assertNotNull(user);
+    assertEquals("user1", user.getName());
+    
+
+    Helper helper = newUserDB.getHelper(3);
+    assertNotNull(helper);
+    assertEquals("helper1", helper.getName());
+}
+
+
+@Test
+void testGetHelper() throws IOException {
+    Helper helper = new Helper(1, "testHelper", true);
+    userDB.createHelper(helper);
+    
+    Helper foundHelper = userDB.getHelper(1);
+    assertNotNull(foundHelper);
+    assertEquals("testHelper", foundHelper.getName());
+    
+    Helper nonexistentHelper = userDB.getHelper(2);
+    assertNull(nonexistentHelper);
+}
+
+
+@Test
+void testCreateHelper() throws IOException {
+    Helper newHelper = new Helper(0, "newHelper", true);
+    Helper createdHelper = userDB.createHelper(newHelper);
+    
+    assertNotNull(createdHelper);
+    assertEquals("newHelper", createdHelper.getName());
+    assertNotEquals(0, createdHelper.getId());
+    
+    // duplicate helper case
+    Helper duplicateHelper = userDB.createHelper(newHelper);
+    assertNull(duplicateHelper);
+}
+
 }
