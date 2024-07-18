@@ -13,7 +13,17 @@ export class NeedService {
   searchSubject: BehaviorSubject<Need[]> = new BehaviorSubject<Need[]>([]);
   search$: Observable<Need[]> = this.searchSubject.asObservable();
 
+  editing: number = 0;
+
   constructor(private http: HttpClient) { }
+
+  public setEdit (id: number): void {
+    this.editing = id;
+  }
+
+  public getEdit (): number {
+    return this.editing;
+  }
 
   async callGetNeeds(): Promise<Need[]> {
     try {
@@ -28,9 +38,23 @@ export class NeedService {
   }
 
   async searchNeeds(text: string): Promise<void> {
-    const needs: Need[] = await firstValueFrom(
+    var needs: Need[] = await firstValueFrom(
       this.http.get<Need[]>(`${this.apiUrl}/Needs/?name=${text}`));
       this.searchSubject = new BehaviorSubject<Need[]>(needs);
       this.search$ = this.searchSubject.asObservable();
+  }
+
+  async deleteNeed(id: number): Promise<Need> {
+    var need: Need = await firstValueFrom(
+      this.http.delete<Need>(`${this.apiUrl}/Needs/${id}`));
+      return need;
+  }
+
+  async makeNeed(need: Need): Promise<void> {
+    await firstValueFrom(this.http.post<void>(`${this.apiUrl}/Needs?name=${need.name}&type=${need.type}&quantity=${need.quantity}$cost=${need.cost}`,{observable: "response"}));
+  }
+
+  async editNeed(need: Need): Promise<void> {
+    await firstValueFrom(this.http.put<void>(`${this.apiUrl}/Needs?id=${need.id}&name=${need.name}&type=${need.type}&quantity=${need.quantity}$cost=${need.cost}`,{observable: "response"}));
   }
 }

@@ -1,4 +1,4 @@
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-<div *ngFor="let need of needs">
+<div id="needs_list"*ngFor="let need of needs">
     <app-need [need]="need"></app-need>
 </div>
