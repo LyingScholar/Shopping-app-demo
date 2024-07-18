@@ -1,5 +1,10 @@
 package com.ufund.api.ufundapi;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Handles the REST API requests for the Helper resource
@@ -77,7 +77,7 @@ public class HelperController {
      */
     @GetMapping("/needs/search/")
     public ResponseEntity<Need[]> searchNeeds(@RequestParam(required = false) String name) {
-        LOG.info("GET /Helper/needs/search/?name=" + name);
+        LOG.log(Level.INFO, "GET /Helper/needs/search/?name={0}", name);
         
         try {
             Need[] needs = cupboard.findNeeds(name);
@@ -99,7 +99,7 @@ public class HelperController {
      */
     @PostMapping("")
     public ResponseEntity<User> createHelper(@RequestBody Helper helper) {
-        LOG.info("POST /Helper " + helper);
+        LOG.log(Level.INFO, "POST /Helper {0}", helper);
         
         try {
             Helper newHelper = userDB.createHelper(helper);
@@ -108,7 +108,7 @@ public class HelperController {
             } else {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -122,7 +122,7 @@ public class HelperController {
      */
     @GetMapping("/fundingBasket/")
     public ResponseEntity<ArrayList<Need>> viewFundingBasket(@RequestParam(required = true) int userId) {
-        LOG.info("GET /Helper/fundingBasket/?userId=" + userId);
+        LOG.log(Level.INFO, "GET /Helper/fundingBasket/?userId={0}", userId);
         
         try {
             Helper helper = userDB.getHelper(userId);
@@ -152,7 +152,7 @@ public class HelperController {
      */
     @PutMapping("/fundingBasket/{userId}/{needId}")
     public ResponseEntity<Need> addNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
-        LOG.info("PUT /Helper/fundingBasket/" + userId + "/" + needId);
+        LOG.log(Level.INFO, "PUT /Helper/fundingBasket/{0}/{1}", new Object[]{userId, needId});
 
         try {
             User user = userDB.getUser(userId);
@@ -171,7 +171,7 @@ public class HelperController {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }  
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -186,7 +186,7 @@ public class HelperController {
      */
     @DeleteMapping("fundingBasket/delete/{userId}/{needId}")
     public ResponseEntity<Need> removeNeed(@PathVariable(required = true) int userId, @PathVariable(required = true) int needId) {
-        LOG.info("DELETE /Helper/fundingBasket/delete/" + userId + "/" + needId);
+        LOG.log(Level.INFO, "DELETE /Helper/fundingBasket/delete/{0}/{1}", new Object[]{userId, needId});
 
         try {
             User user = userDB.getUser(userId);
@@ -205,7 +205,7 @@ public class HelperController {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 } 
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -219,7 +219,7 @@ public class HelperController {
      */
     @PutMapping("/checkout/{userId}")
     public ResponseEntity<Need> checkout(@PathVariable(required = true) int userId) {
-        LOG.info("PUT /Helper/checkout/" + userId);
+        LOG.log(Level.INFO, "PUT /Helper/checkout/{0}", userId);
 
         try {
             User user = userDB.getUser(userId);

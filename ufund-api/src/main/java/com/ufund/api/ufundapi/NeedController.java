@@ -1,5 +1,9 @@
 package com.ufund.api.ufundapi;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -7,17 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.ufund.api.ufundapi.Need;
-import com.ufund.api.ufundapi.Cupboard;
 
 /**
  * Handles the REST API requests for the Need resource
@@ -32,7 +29,7 @@ import com.ufund.api.ufundapi.Cupboard;
 @RestController
 @RequestMapping("Needs")
 public class NeedController {
-    private static final Logger LOG = Logger.getLogger(NeedController.class.getName());
+    private static Logger LOG = Logger.getLogger(NeedController.class.getName());
     private Cupboard Cupboard;
 
     /**
@@ -57,11 +54,11 @@ public class NeedController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Need> getNeed(@PathVariable int id) {
-        LOG.info("GET /Needs/" + id);
+        LOG.log(Level.INFO, "GET /Needs/{0}", id);
         try {
             Need Need = Cupboard.getNeed(id);
             if (Need != null)
-                return new ResponseEntity<Need>(Need,HttpStatus.OK);
+                return new ResponseEntity<>(Need,HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } 
@@ -109,7 +106,7 @@ public class NeedController {
      */
     @GetMapping("/")
     public ResponseEntity<Need[]> searchNeeds(@RequestParam(required=false) String name) {
-        LOG.info("GET /Needs/?name="+name);
+        LOG.log(Level.INFO, "GET /Needs/?name={0}", name);
         
         try {
             Need[] Needs = Cupboard.findNeeds(name);
@@ -135,7 +132,7 @@ public class NeedController {
     @PostMapping("")
     public ResponseEntity<Need> createNeed(@RequestParam() String name, @RequestParam() String type, 
                                             @RequestParam() int quantity, @RequestParam() int cost) {
-        LOG.info("POST /Needs/" + name + "/" + quantity + "/" + cost + "/" + type);
+        LOG.log(Level.INFO, "POST /Needs/{0}/{1}/{2}/{3}", new Object[]{name, quantity, cost, type});
         
         try {
             Need initialNeed = new Need(1, name, quantity, cost, type);
@@ -145,7 +142,7 @@ public class NeedController {
             } else {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -164,7 +161,7 @@ public class NeedController {
     @PutMapping("")
     public ResponseEntity<Need> updateNeed(@RequestParam() String id, @RequestParam() String name, @RequestParam() String type, 
                                             @RequestParam() int quantity, @RequestParam() int cost) {
-        LOG.info("PUT /Needs/" + id + "/" + name + "/" + quantity + "/" + cost + "/" + type);
+        LOG.log(Level.INFO, "PUT /Needs/{0}/{1}/{2}/{3}/{4}", new Object[]{id, name, quantity, cost, type});
 
         try {
             Need inputNeed = new Need(1, name, quantity, cost, type);
@@ -173,7 +170,7 @@ public class NeedController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(updatedNeed, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -190,7 +187,7 @@ public class NeedController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Need> deleteNeed(@PathVariable int id) {
-        LOG.info("DELETE /Needs/" + id);
+        LOG.log(Level.INFO, "DELETE /Needs/{0}", id);
 
         try {
             if (Cupboard.deleteNeed(id)) {
@@ -198,7 +195,7 @@ public class NeedController {
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

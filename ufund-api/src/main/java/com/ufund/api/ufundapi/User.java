@@ -11,8 +11,8 @@ public class User {
     static final String STRING_FORMAT = "User [id=%d, name=%s, admin=%s]";
 
     @JsonProperty("id") private final int id;
-    @JsonProperty("name") private String name;
-    @JsonProperty("admin") private Boolean admin;
+    @JsonProperty("name") private final String name;
+    @JsonProperty("admin") private final Boolean admin;
 
     /**
      * Create a User with the given id and name
