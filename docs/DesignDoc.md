@@ -14,7 +14,7 @@ geometry: margin=1in
   * Rushil Patel
   * Jacob Eggleston
   * Quinton Miller
-  * Micheal Bhardwaj
+  * Michael Bhardwaj
 
 ## Executive Summary
 
