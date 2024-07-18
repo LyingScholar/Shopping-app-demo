@@ -12,32 +12,31 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 @Component
 public class Cupboard {
-    
+
     private static final Logger LOG = Logger.getLogger(Cupboard.class.getName());
-    Map<Integer,Need> needs;   // Provides a local cache of the need objects
-                                // so that we don't need to read from the file
-                                // each time
-    private ObjectMapper objectMapper;  // Provides conversion between Need
-                                        // objects and JSON text format written
-                                        // to the file
-    private static int nextId;  // The next Id to assign to a new need
-    private String filename;    // Filename to read from and write to
+    Map<Integer, Need> needs; // Provides a local cache of the need objects
+                              // so that we don't need to read from the file
+                              // each time
+    private ObjectMapper objectMapper; // Provides conversion between Need
+                                       // objects and JSON text format written
+                                       // to the file
+    private static int nextId; // The next Id to assign to a new need
+    private String filename; // Filename to read from and write to
 
     /**
      * Creates a Need File Data Access Object
      * 
-     * @param filename Filename to read from and write to
+     * @param filename     Filename to read from and write to
      * @param objectMapper Provides JSON Object to/from Java Object serialization and deserialization
      * 
      * @throws IOException when file cannot be accessed or read from
      */
-    public Cupboard(@Value("${needs.file}") String filename,ObjectMapper objectMapper) throws IOException {
+    public Cupboard(@Value("${needs.file}") String filename, ObjectMapper objectMapper) throws IOException {
         this.filename = filename;
         this.objectMapper = objectMapper;
-        load();  // load the needs from the file
+        load(); // load the needs from the file
     }
 
     /**
@@ -54,7 +53,7 @@ public class Cupboard {
     /**
      * Generates an array of {@linkplain Need needs} from the tree map
      * 
-     * @return  The array of {@link Need needs}, may be empty
+     * @return The array of {@link Need needs}, may be empty
      */
     private Need[] getNeedsArray() {
         return getNeedsArray("");
@@ -67,7 +66,7 @@ public class Cupboard {
      * If containsText is null, the array contains all of the {@linkplain Need needs}
      * in the tree map
      * 
-     * @return  The array of {@link Need needs}, may be empty
+     * @return The array of {@link Need needs}, may be empty
      */
     private Need[] getNeedsArray(String containsText) { // if containsText == null, no filter
         ArrayList<Need> needArrayList = new ArrayList<>();
@@ -100,7 +99,7 @@ public class Cupboard {
         // Serializes the Java Objects to JSON objects into the file
         // writeValue will thrown an IOException if there is an issue
         // with the file or reading from the file
-        objectMapper.writeValue(new File(filename),needArray);
+        objectMapper.writeValue(new File(filename), needArray);
         return true;
     }
 
@@ -120,16 +119,14 @@ public class Cupboard {
         // Deserializes the JSON objects from the file into an array of needs
         // readValue will throw an IOException if there's an issue with the file
         // or reading from the file
-        Need[] needArray = objectMapper.readValue(new File(filename),Need[].class);
+        Need[] needArray = objectMapper.readValue(new File(filename), Need[].class);
         if (needArray != null) {
-        if (needArray != null) {
-                // Add each need to the tree map and keep track of the greatest id
-                for (Need need : needArray) {
-                    needs.put(need.getId(),need);
-                    if (need.getId() > nextId)
-                        nextId = need.getId();
-                }
-        }
+            // Add each need to the tree map and keep track of the greatest id
+            for (Need need : needArray) {
+                needs.put(need.getId(), need);
+                if (need.getId() > nextId)
+                    nextId = need.getId();
+            }
             // Make the next id one greater than the maximum from the file
             ++nextId;
             return true;
@@ -139,27 +136,36 @@ public class Cupboard {
     }
 
     /**
-    ** {@inheritDoc}
+     * Returns an array of all needs in the cupboard.
+     *
+     * @return an array of all {@link Need} objects
      */
-    
     public Need[] getNeeds() {
-        synchronized(needs) {
+        synchronized (needs) {
             return getNeedsArray();
         }
     }
 
     /**
-    ** {@inheritDoc}
+     * Finds and returns an array of needs that contain the specified text.
+     *
+     * @param containsText the text to search for within the needs
+     * @return an array of {@link Need} objects that contain the specified text
      */
-    
     public Need[] findNeeds(String containsText) {
-        synchronized(needs) { 
+        synchronized (needs) {
             return getNeedsArray(containsText);
         }
     }
 
+    /**
+     * Checks if there is a need with the specified name.
+     *
+     * @param name the name of the need to check
+     * @return true if a need with the specified name exists, false otherwise
+     */
     public boolean checkForANeed(String name) {
-        synchronized(needs) {
+        synchronized (needs) {
             Need[] needArray = getNeedsArray();
             if (needArray == null) {
                 return false;
@@ -173,12 +179,15 @@ public class Cupboard {
             }
         }
     }
+
     /**
-    ** {@inheritDoc}
+     * Retrieves a need by its ID.
+     *
+     * @param id the ID of the need to retrieve
+     * @return the {@link Need} object with the specified ID, or null if not found
      */
-    
     public Need getNeed(int id) {
-        synchronized(needs) {
+        synchronized (needs) {
             if (needs.containsKey(id))
                 return needs.get(id);
             else
@@ -187,22 +196,25 @@ public class Cupboard {
     }
 
     /**
-    ** {@inheritDoc}
+     * Creates a new need and adds it to the cupboard.
+     *
+     * @param need the {@link Need} object to create
+     * @return the created {@link Need} object, or null if a need with the same name already exists
+     * @throws IOException if an I/O error occurs during saving
      */
-    
     public Need createNeed(Need need) throws IOException {
-        synchronized(needs) {
+        synchronized (needs) {
             // We create a new need object because the id field is immutable
             // and we need to assign the next unique id
             if (!checkForANeed(need.getName())) {
                 Need newNeed;
                 if (isEmpty()) {
-                    newNeed = new Need(1,need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                    newNeed = new Need(1, need.getName(), need.getQuantity(), need.getCost(), need.getType());
                     nextId = 2;
                 } else {
-                    newNeed = new Need(nextId(),need.getName(), need.getQuantity(), need.getCost(), need.getType());
+                    newNeed = new Need(nextId(), need.getName(), need.getQuantity(), need.getCost(), need.getType());
                 }
-                needs.put(newNeed.getId(),newNeed);
+                needs.put(newNeed.getId(), newNeed);
                 save(); // may throw an IOException
                 return newNeed;
             } else {
@@ -212,51 +224,73 @@ public class Cupboard {
     }
 
     /**
-    ** {@inheritDoc}
+     * Updates an existing need in the cupboard.
+     *
+     * @param need the {@link Need} object to update
+     * @return the updated {@link Need} object, or null if the need does not exist
+     * @throws IOException if an I/O error occurs during saving
      */
-    
     public Need updateNeed(Need need) throws IOException {
-        synchronized(needs) {
+        synchronized (needs) {
             if (needs.containsKey(need.getId()) == false)
-                return null;  // need does not exist
+                return null; // need does not exist
 
-            needs.put(need.getId(),need);
+            needs.put(need.getId(), need);
             save(); // may throw an IOException
             return need;
         }
     }
 
     /**
-    ** {@inheritDoc}
+     * Deletes a need by its ID.
+     *
+     * @param id the ID of the need to delete
+     * @return true if the need was deleted successfully, false otherwise
+     * @throws IOException if an I/O error occurs during saving
      */
-    
     public boolean deleteNeed(int id) throws IOException {
-        synchronized(needs) {
+        synchronized (needs) {
             if (needs.containsKey(id)) {
                 needs.remove(id);
                 return save();
-            }
-            else
+            } else
                 return false;
         }
     }
 
+    /**
+     * Adds a need to the cupboard.
+     *
+     * @param need the {@link Need} object to add
+     * @throws IOException if an I/O error occurs during saving
+     */
     public void addNeed(Need need) throws IOException {
-        synchronized(needs) {
-            needs.put(need.getId(),need);
+        synchronized (needs) {
+            needs.put(need.getId(), need);
             save();
         }
     }
 
+    /**
+     * Removes a need from the cupboard.
+     *
+     * @param need the {@link Need} object to remove
+     * @throws IOException if an I/O error occurs during saving
+     */
     public void removeNeed(Need need) throws IOException {
-        synchronized(needs) {
+        synchronized (needs) {
             needs.remove(need.getId());
             save();
         }
     }
 
+    /**
+     * Checks if the cupboard is empty.
+     *
+     * @return true if the cupboard is empty, false otherwise
+     */
     public boolean isEmpty() {
-        synchronized(needs) {
+        synchronized (needs) {
             if (getNeedsArray() == null) {
                 return true;
             } else {
@@ -264,6 +298,4 @@ public class Cupboard {
             }
         }
     }
-
-    
 }
