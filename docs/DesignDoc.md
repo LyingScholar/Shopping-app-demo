@@ -222,7 +222,7 @@ However, we noted that some complex concurrency scenarios were challenging to te
 
 Anomaly: While overall coverage is high, we noticed that some exception handling code paths were not fully exercised. In future iterations, we plan to introduce more fault injection tests to cover these scenarios.
 
-![Domain Model](sprint-2-code-coverage.png)
+![Domain Model](sprint-3-code-coverage.png)
 
 
 ## Ongoing Rationale
