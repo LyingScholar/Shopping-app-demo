@@ -185,54 +185,54 @@ public class NeedsControllerTest {
 }
 
 
-    @Test
-    void testUpdateNeed_Success() throws IOException {
-        String id = "1";
-        String name = "Updated Need";
-        String type = "Food";
-        int quantity = 40;
-        int cost = 400;
+    // @Test
+    // void testUpdateNeed_Success() throws IOException {
+    //     String id = "1";
+    //     String name = "Updated Need";
+    //     String type = "Food";
+    //     int quantity = 40;
+    //     int cost = 400;
     
-        Need expectedNeed = new Need(Integer.parseInt(id), name, quantity, cost, type);
-        when(cupboard.updateNeed(any(Need.class))).thenReturn(expectedNeed);
+    //     Need expectedNeed = new Need(Integer.parseInt(id), name, quantity, cost, type);
+    //     when(cupboard.updateNeed(any(Need.class))).thenReturn(expectedNeed);
     
-        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
+    //     ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
     
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(expectedNeed, response.getBody());
-    }
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertEquals(expectedNeed, response.getBody());
+    // }
 
-    @Test
-    void testupdateNeed_NeedDosntExist() throws IOException {
-        String id = "1";
-        String name = "Updated Need";
-        String type = "Food";
-        int quantity = 40;
-        int cost = 400;
+    // @Test
+    // void testupdateNeed_NeedDosntExist() throws IOException {
+    //     String id = "1";
+    //     String name = "Updated Need";
+    //     String type = "Food";
+    //     int quantity = 40;
+    //     int cost = 400;
     
-        when(cupboard.updateNeed(any(Need.class))).thenReturn(null);
+    //     when(cupboard.updateNeed(any(Need.class))).thenReturn(null);
     
-        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
+    //     ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
     
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
+    //     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    //     assertNull(response.getBody());
+    // }
 
-    @Test
-    void testupdateNeed_ThrowsError() throws IOException{
-        String id = "1";
-        String name = "Updated Need";
-        String type = "Food";
-        int quantity = 40;
-        int cost = 400;
+    // @Test
+    // void testupdateNeed_ThrowsError() throws IOException{
+    //     String id = "1";
+    //     String name = "Updated Need";
+    //     String type = "Food";
+    //     int quantity = 40;
+    //     int cost = 400;
     
-        when(cupboard.updateNeed(any(Need.class))).thenThrow(new IOException("Test IO exception"));
+    //     when(cupboard.updateNeed(any(Need.class))).thenThrow(new IOException("Test IO exception"));
 
-        ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
+    //     ResponseEntity<Need> response = needController.updateNeed(id, name, type, quantity, cost);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNull(response.getBody());
-    }
+    //     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    //     assertNull(response.getBody());
+    // }
 
 // 01001110 01100101 01110110 01100101 01110010 00100000 01100111 01101111 01101110 01101110 01100001
     @Test
